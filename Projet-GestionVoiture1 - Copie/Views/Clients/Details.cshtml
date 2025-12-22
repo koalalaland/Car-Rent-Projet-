@@ -1,0 +1,115 @@
+﻿@model Projet_GestionVoiture1.Models.Client
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Détails du client";
+}
+
+<div class="page-header">
+    <h1>Détails du client</h1>
+    <p>Informations complètes sur @Model.Prenom @Model.Nom</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Nom complet</dt>
+                    <dd class="col-sm-8">@Model.Nom @Model.Prenom</dd>
+
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4">Téléphone</dt>
+                    <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "Non fourni" : Model.PhoneNumber)</dd>
+
+                    <dt class="col-sm-4">ID Utilisateur</dt>
+                    <dd class="col-sm-8">@Model.Id</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🔹 Historique des réservations -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Historique des réservations (@Model.Reservations.Count)</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Reservations.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Voiture</th>
+                                    <th>Date début</th>
+                                    <th>Date fin</th>
+                                    <th>Statut</th>
+                                    <th>Montant</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var resa in Model.Reservations.OrderBy(r => r.DateDebut))
+                                {
+                                    <tr>
+                                        <td>@(resa.Voiture?.Nom ?? "—")</td>
+                                        <td>@resa.DateDebut.ToString("dd/MM/yyyy")</td>
+                                        <td>@resa.DateFin.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            @switch (resa.Statut)
+                                            {
+                                                case "En attente":
+                                                    <span class="badge bg-warning text-dark">En attente</span>
+                                                    break;
+                                                case "Confirmée":
+                                                    <span class="badge bg-success">Confirmée</span>
+                                                    break;
+                                                case "Annulée":
+                                                    <span class="badge bg-danger">Annulée</span>
+                                                    break;
+                                                default:
+                                                    <span class="badge bg-secondary">@resa.Statut</span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td>@resa.MontantTotal.ToString("F2") MAD</td>
+                                        <td>
+                                            <a asp-controller="Reservations" asp-action="Edit" asp-route-id="@resa.Id" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit"></i> Modifier
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-file-invoice" style="font-size: 40px; color: #ccc; margin-bottom: 10px;"></i>
+                        <p class="text-muted">Aucune réservation pour ce client.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+        <i class="fas fa-edit"></i> Modifier
+    </a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+        <i class="fas fa-trash"></i> Supprimer
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+    </a>
+</div>

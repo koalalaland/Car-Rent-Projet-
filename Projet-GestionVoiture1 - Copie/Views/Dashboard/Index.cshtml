@@ -1,0 +1,337 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Dashboard";
+
+    var recentBookings = ViewBag.RecentBookings as List<Projet_GestionVoiture1.Models.Reservation>;
+    var topCarsWithDetails = ViewBag.TopCarsWithDetails as List<dynamic>;
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // 🔹 Données pour le toggle
+        const labels = [@Html.Raw(ViewBag.DailyRevenueLabels)];
+        const realData = [@Html.Raw(ViewBag.RealRevenueData)];
+        const potentialData = [@Html.Raw(ViewBag.PotentialRevenueData)];
+
+        const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(ctxRevenue, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Revenus réalisés (MAD)',
+                    data: realData,
+                    borderColor: '#2ecc71',
+                    backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + ' MAD';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 🔹 Toggle entre réel et potentiel
+        function toggleRevenueView() {
+            const btn = document.getElementById('toggleRevenueBtn');
+            const isPotential = btn.getAttribute('data-view') === 'potential';
+
+            if (isPotential) {
+                // Basculer vers RÉEL
+                revenueChart.data.datasets[0].data = realData;
+                revenueChart.data.datasets[0].label = 'Revenus réalisés (MAD)';
+                revenueChart.data.datasets[0].borderColor = '#2ecc71';
+                revenueChart.data.datasets[0].backgroundColor = 'rgba(46, 204, 113, 0.1)';
+                btn.innerHTML = '<i class="fas fa-eye"></i> Voir revenus potentiels';
+                btn.setAttribute('data-view', 'real');
+                btn.className = 'btn btn-sm btn-outline-success';
+            } else {
+                // Basculer vers POTENTIEL
+                revenueChart.data.datasets[0].data = potentialData;
+                revenueChart.data.datasets[0].label = 'Revenus potentiels (MAD)';
+                revenueChart.data.datasets[0].borderColor = '#f39c12';
+                revenueChart.data.datasets[0].backgroundColor = 'rgba(243, 156, 18, 0.1)';
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Voir revenus réalisés';
+                btn.setAttribute('data-view', 'potential');
+                btn.className = 'btn btn-sm btn-outline-warning';
+            }
+            revenueChart.update();
+        }
+
+        // 🔹 Graphique circulaire : statuts
+        const ctxStatus = document.getElementById('statusChart').getContext('2d');
+        new Chart(ctxStatus, {
+            type: 'doughnut',
+            data: {
+                labels: [@Html.Raw(ViewBag.StatusLabels)],
+                datasets: [{
+                    data: [@Html.Raw(ViewBag.StatusData)],
+                    backgroundColor: [
+                        '#f39c12', // En attente
+                        '#2ecc71', // Confirmée
+                        '#e74c3c'  // Annulée
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+    <p>Vue d'ensemble de votre plateforme de location de voitures</p>
+</div>
+
+<!-- Statistiques globales -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card bg-primary text-white">
+            <div class="stat-icon"><i class="fas fa-car"></i></div>
+            <div class="stat-value">@ViewBag.TotalReservations</div>
+            <div class="stat-label">Réservations totales</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-success text-white">
+            <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+            <div class="stat-value">@ViewBag.TotalRevenue.ToString("F2") MAD</div>
+            <div class="stat-label">Revenu total réalisé</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-info text-white">
+            <div class="stat-icon"><i class="fas fa-car-alt"></i></div>
+            <div class="stat-value">@ViewBag.AvailableCars</div>
+            <div class="stat-label">Voitures disponibles</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-warning text-dark">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-value">@ViewBag.TotalClients</div>
+            <div class="stat-label">Clients actifs</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Revenus des 7 derniers jours -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Revenus des 7 derniers jours</h5>
+                <button id="toggleRevenueBtn" 
+                        class="btn btn-sm btn-outline-success"
+                        data-view="real"
+                        onclick="toggleRevenueView()">
+                    <i class="fas fa-eye"></i> Voir revenus potentiels
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart" height="300"></canvas>
+            </div>
+        </div>
+
+        <!-- Dernières réservations -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Dernières réservations</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Voiture</th>
+                            <th>Date début</th>
+                            <th>Statut</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in recentBookings ?? Enumerable.Empty<Projet_GestionVoiture1.Models.Reservation>())
+                        {
+                            <tr>
+                                <td>@(item.Client?.Nom ?? "") @(item.Client?.Prenom ?? "")</td>
+                                <td>@(item.Voiture?.Nom ?? $"{item.Voiture?.Marque} {item.Voiture?.Modele}")</td>
+                                <td>@item.DateDebut.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @switch (item.Statut)
+                                    {
+                                        case "En attente":
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                            break;
+                                        case "Confirmée":
+                                            <span class="badge bg-success">Confirmée</span>
+                                            break;
+                                        case "Annulée":
+                                            <span class="badge bg-danger">Annulée</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">@item.Statut</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>@item.MontantTotal.ToString("F2") MAD</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 d-flex flex-column gap-3">
+        <div class="card flex-grow-0">
+            <div class="card-header">
+                <h5>Statut des réservations</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="statusChart" height="180"></canvas>
+            </div>
+        </div>
+
+        <div class="card flex-grow-0">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Voitures les plus demandées</h5>
+                <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#allCarsModal">
+                    Voir toutes
+                </a>
+            </div>
+            <div class="card-body p-0">
+                @if (topCarsWithDetails != null && topCarsWithDetails.Any())
+                {
+                    int maxCount = topCarsWithDetails.Max(t => (int)t.Count);
+
+                    foreach (var car in topCarsWithDetails)
+                    {
+                        var count = (int)car.Count;
+                        var percentage = Math.Round((double)count / maxCount * 100, 0);
+                        var imageUrl = !string.IsNullOrEmpty(car.Voiture.ImageUrl) ? car.Voiture.ImageUrl : "/images/default-car.png";
+                        var carName = string.IsNullOrEmpty(car.Voiture.Nom)
+                            ? $"{car.Voiture.Marque} {car.Voiture.Modele}"
+                            : car.Voiture.Nom;
+
+                        <div class="d-flex align-items-center p-3 border-bottom">
+                            <img src="@imageUrl" alt="@carName" style="width:60px; height:50px; object-fit:cover; border-radius:6px; margin-right:12px;" />
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>@carName</strong>
+                                    <span class="text-muted">@count réservation@(count > 1 ? "s" : "")</span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: @percentage%;" aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center p-4 text-muted">
+                        <i class="fas fa-car fa-2x mb-2"></i><br />
+                        Aucune voiture n’a encore été louée.
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card flex-grow-0">
+            <div class="card-header">
+                <h5>Rapports</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-file-excel fa-3x text-success mb-3"></i>
+                    <p class="text-muted">Exporter les données sous forme de rapport</p>
+                </div>
+                <div class="d-grid gap-2">
+                    <a asp-action="ExportReservations" asp-controller="Dashboard" class="btn btn-outline-success">
+                        <i class="fas fa-download"></i> Rapport des réservations
+                    </a>
+                    <a asp-action="ExportClients" asp-controller="Dashboard" class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Rapport des clients
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Toutes les voitures -->
+<div class="modal fade" id="allCarsModal" tabindex="-1" aria-labelledby="allCarsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="allCarsModalLabel">Toutes les voitures</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                @{
+                    var allCars = ViewBag.AllCars as List<Projet_GestionVoiture1.Models.Voiture>;
+                }
+                @if (allCars != null && allCars.Any())
+                {
+                    <div class="row g-3">
+                        @foreach (var voiture in allCars)
+                        {
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center p-2 border rounded">
+                                    <img src="@(string.IsNullOrEmpty(voiture.ImageUrl) ? "/images/default-car.png" : voiture.ImageUrl)"
+                                         alt="@(string.IsNullOrEmpty(voiture.Nom) ? $"{voiture.Marque} {voiture.Modele}" : voiture.Nom)"
+                                         style="width:60px; height:50px; object-fit:cover; border-radius:6px; margin-right:12px;" />
+                                    <div>
+                                        <strong>@(string.IsNullOrEmpty(voiture.Nom) ? $"{voiture.Marque} {voiture.Modele}" : voiture.Nom)</strong><br />
+                                        <small class="text-muted">
+                                            @voiture.PrixParJour.ToString("F2") MAD/jour •
+                                            @if (voiture.Etat == "Disponible")
+                                            {
+                                                <span class="text-success"><i class="fas fa-check-circle"></i> Disponible</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger"><i class="fas fa-times-circle"></i> @voiture.Etat</span>
+                                            }
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center">Aucune voiture enregistrée.</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>

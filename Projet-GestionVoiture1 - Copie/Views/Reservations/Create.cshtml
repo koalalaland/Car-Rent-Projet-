@@ -1,0 +1,185 @@
+﻿@* 
+@model Projet_GestionVoiture1.Models.Reservation
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Nouvelle Réservation";
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+    <p>Créer une nouvelle réservation pour un client</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="table-card">
+            <div class="card-header">
+                <h3>Informations de la réservation</h3>
+            </div>
+            <div style="padding: 24px;">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="ClientId" class="form-label">Client *</label>
+                        <select asp-for="ClientId" class="form-control" asp-items="@(new SelectList(ViewBag.Clients, "Id", "NomComplet"))">
+                            <option value="">-- Sélectionner un client --</option>
+                        </select>
+                        <span asp-validation-for="ClientId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="VoitureId" class="form-label">Voiture *</label>
+                        <select asp-for="VoitureId" class="form-control" asp-items="@(new SelectList(ViewBag.Voitures, "Id", "Display"))">
+                            <option value="">-- Sélectionner une voiture --</option>
+                        </select>
+                        <span asp-validation-for="VoitureId" class="text-danger"></span>
+                        <small class="text-muted">Seulement les voitures disponibles</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DateDebut" class="form-label">Date de début *</label>
+                            <input asp-for="DateDebut" class="form-control" type="date" />
+                            <span asp-validation-for="DateDebut" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DateFin" class="form-label">Date de fin *</label>
+                            <input asp-for="DateFin" class="form-control" type="date" />
+                            <span asp-validation-for="DateFin" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="MontantTotal" class="form-label">Montant total (MAD) *</label>
+                        <input asp-for="MontantTotal" class="form-control" type="number" step="0.01" min="0" />
+                        <span asp-validation-for="MontantTotal" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Créer la réservation
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="table-card">
+            <div class="card-header">
+                <h3>Informations</h3>
+            </div>
+            <div style="padding: 24px;">
+                <p><i class="fas fa-info-circle text-primary"></i> La réservation sera créée avec le statut "En attente"</p>
+                <p><i class="fas fa-check-circle text-success"></i> Vous pourrez la modifier ou la supprimer plus tard</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@
+
+@model Projet_GestionVoiture1.Models.Reservation
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Nouvelle Réservation";
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+    <p>Créer une nouvelle réservation pour un client</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="table-card">
+            <div class="card-header">
+                <h3>Informations de la réservation</h3>
+            </div>
+            <div style="padding: 24px;">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="ClientId" class="form-label">Client *</label>
+                        <select asp-for="ClientId" class="form-control" asp-items="@(new SelectList(ViewBag.Clients, "Id", "NomComplet"))">
+                            <option value="">-- Sélectionner un client --</option>
+                        </select>
+                        <span asp-validation-for="ClientId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="VoitureId" class="form-label">Voiture *</label>
+                        <select asp-for="VoitureId" class="form-control" asp-items="@(new SelectList(ViewBag.Voitures, "Id", "Display"))">
+                            <option value="">-- Sélectionner une voiture --</option>
+                        </select>
+                        <span asp-validation-for="VoitureId" class="text-danger"></span>
+                        <small class="text-muted">Seulement les voitures disponibles</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DateDebut" class="form-label">Date de début *</label>
+                            <input asp-for="DateDebut" class="form-control" type="date" />
+                            <span asp-validation-for="DateDebut" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DateFin" class="form-label">Date de fin *</label>
+                            <input asp-for="DateFin" class="form-control" type="date" />
+                            <span asp-validation-for="DateFin" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- 🔹 Montant total : PLUS ÉDITABLE – affichage informatif uniquement -->
+                    <div class="mb-3">
+                        <label class="form-label">Montant total (MAD)</label>
+                        <div class="form-control-plaintext text-muted" style="font-size: 1.1rem;">
+                            (Calculé automatiquement après validation)
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Créer la réservation
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="table-card">
+            <div class="card-header">
+                <h3>Informations</h3>
+            </div>
+            <div style="padding: 24px;">
+                <p><i class="fas fa-info-circle text-primary"></i> La réservation sera créée avec le statut "En attente"</p>
+                <p><i class="fas fa-check-circle text-success"></i> Vous pourrez la modifier ou la supprimer plus tard</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

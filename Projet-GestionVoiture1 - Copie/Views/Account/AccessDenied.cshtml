@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Accès Refusé";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="login-wrap p-4 p-md-5 text-center">
+    <div class="icon d-flex align-items-center justify-content-center" style="background: #dc3545;">
+        <span class="ion-ios-lock"></span>
+    </div>
+    <h3 class="mt-4 mb-4">Accès Refusé</h3>
+    <p class="text-muted">Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
+    <div class="mt-4">
+        <a asp-controller="ClientInterface" asp-action="Home" class="btn btn-primary">
+            <i class="ion-ios-home"></i> Retour à l'accueil
+        </a>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary ml-2">
+            <i class="ion-ios-log-in"></i> Se connecter
+        </a>
+    </div>
+</div>

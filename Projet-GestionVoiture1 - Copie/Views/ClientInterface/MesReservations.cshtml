@@ -1,0 +1,173 @@
+@model IEnumerable<Projet_GestionVoiture1.Models.Reservation>
+@{
+    ViewData["Title"] = "Mes Réservations";
+}
+
+<!-- Hero Section -->
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="/">Accueil <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a href="@Url.Action("Profile", "ClientInterface")">Mon Profil <i class="ion-ios-arrow-forward"></i></a></span> <span>Mes Réservations <i class="ion-ios-arrow-forward"></i></span></p>
+                <h1 class="mb-3 bread">Mes Réservations</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <!-- Statistiques -->
+        <div class="row mb-5">
+            <div class="col-md-3 mb-3">
+                <div class="card bg-primary text-white text-center p-4" style="border-radius: 15px;">
+                    <h2 class="mb-1">@Model.Count()</h2>
+                    <small>Total Réservations</small>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-success text-white text-center p-4" style="border-radius: 15px;">
+                    <h2 class="mb-1">@Model.Count(r => r.Statut == "Confirmée")</h2>
+                    <small>Confirmées</small>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-warning text-dark text-center p-4" style="border-radius: 15px;">
+                    <h2 class="mb-1">@Model.Count(r => r.Statut == "En attente")</h2>
+                    <small>En attente</small>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-danger text-white text-center p-4" style="border-radius: 15px;">
+                    <h2 class="mb-1">@Model.Count(r => r.Statut == "Annulée")</h2>
+                    <small>Annulées</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des réservations -->
+        <div class="card shadow-sm border-0" style="border-radius: 15px;">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
+                <h5 class="mb-0">
+                    <i class="icon-calendar mr-2"></i> Historique des réservations
+                </h5>
+                <a href="@Url.Action("Cars", "ClientInterface")" class="btn btn-success btn-sm">
+                    <i class="icon-plus mr-1"></i> Nouvelle réservation
+                </a>
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Voiture</th>
+                                    <th>Date début</th>
+                                    <th>Date fin</th>
+                                    <th>Durée</th>
+                                    <th>Montant Total</th>
+                                    <th>Date réservation</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var reservation in Model)
+                                {
+                                    var duree = (reservation.DateFin - reservation.DateDebut).Days;
+                                    <tr>
+                                        <td><strong>#@reservation.Id</strong></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                @if (reservation.Voiture != null)
+                                                {
+                                                    <img src="@(reservation.Voiture.ImageUrl ?? "/images/voitures/default.jpg")" 
+                                                         alt="@reservation.Voiture.Marque" 
+                                                         style="width: 80px; height: 50px; object-fit: cover; border-radius: 8px; margin-right: 15px;">
+                                                    <div>
+                                                        <strong>@reservation.Voiture.Marque @reservation.Voiture.Modele</strong>
+                                                        <br>
+                                                        <small class="text-muted">@reservation.Voiture.Categorie</small>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">Voiture non disponible</span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="icon-calendar text-primary mr-1"></i>
+                                            @reservation.DateDebut.ToString("dd/MM/yyyy")
+                                        </td>
+                                        <td>
+                                            <i class="icon-calendar text-danger mr-1"></i>
+                                            @reservation.DateFin.ToString("dd/MM/yyyy")
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info text-white">@duree jour(s)</span>
+                                        </td>
+                                        <td>
+                                            <strong class="text-success">@reservation.MontantTotal.ToString("N2") DH</strong>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">@reservation.DateReservation.ToString("dd/MM/yyyy HH:mm")</small>
+                                        </td>
+                                        <td>
+                                            @{
+                                                var (badgeClass, icon) = reservation.Statut switch
+                                                {
+                                                    "Confirmée" => ("bg-success", "icon-check"),
+                                                    "En attente" => ("bg-warning text-dark", "icon-clock"),
+                                                    "Annulée" => ("bg-danger", "icon-close"),
+                                                    _ => ("bg-secondary", "icon-info")
+                                                };
+                                            }
+                                            <span class="badge @badgeClass px-3 py-2">
+                                                <i class="@icon mr-1"></i> @reservation.Statut
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Total -->
+                    <div class="row mt-4">
+                        <div class="col-md-6 offset-md-6">
+                            <div class="card bg-light p-3" style="border-radius: 10px;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h6 mb-0">Montant total dépensé:</span>
+                                    <span class="h4 mb-0 text-success">
+                                        @Model.Sum(r => r.MontantTotal).ToString("N2") DH
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="icon-calendar" style="font-size: 5rem; color: #ddd;"></i>
+                        <h4 class="mt-4 text-muted">Aucune réservation trouvée</h4>
+                        <p class="text-muted mb-4">Vous n'avez pas encore effectué de réservation.<br>Découvrez notre flotte de véhicules et réservez dès maintenant!</p>
+                        <a href="@Url.Action("Cars", "ClientInterface")" class="btn btn-success btn-lg">
+                            <i class="icon-car mr-2"></i> Voir les voitures disponibles
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <!-- Retour au profil -->
+        <div class="text-center mt-4">
+            <a href="@Url.Action("Profile", "ClientInterface")" class="btn btn-outline-secondary">
+                <i class="icon-arrow-left mr-2"></i> Retour au profil
+            </a>
+        </div>
+    </div>
+</section>

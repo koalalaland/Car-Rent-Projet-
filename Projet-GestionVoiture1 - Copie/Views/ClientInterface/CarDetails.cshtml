@@ -1,0 +1,461 @@
+@model Projet_GestionVoiture1.Models.Voiture
+@{
+    ViewData["Title"] = Model.Nom + " - Autoroad Car Rental";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Hero Section -->
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('@Url.Content("~/images/bg_2.jpg")');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="@Url.Action("Home", "ClientInterface")">Home <i class="ion-ios-arrow-forward"></i></a></span>
+                    <span class="mr-2"><a href="@Url.Action("Cars", "ClientInterface")">Our Cars <i class="ion-ios-arrow-forward"></i></a></span>
+                    <span>@Model.Nom <i class="ion-ios-arrow-forward"></i></span>
+                </p>
+                <h1 class="mb-3 bread">@Model.Nom</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Car Details Section -->
+<section class="ftco-section ftco-car-details">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="car-details">
+                    <div class="row">
+                        <!-- Car Image -->
+                        <div class="col-md-6 mb-4">
+                            <div class="img rounded d-flex align-items-end" 
+                                 style="background-image: url('@Url.Content(string.IsNullOrEmpty(Model.ImageUrl) ? "~/images/car-1.jpg" : Model.ImageUrl)'); 
+                                        height: 400px; 
+                                        background-size: cover; 
+                                        background-position: center;">
+                            </div>
+                        </div>
+                        
+                        <!-- Car Info -->
+                        <div class="col-md-6">
+                            <div class="car-overview ftco-animate">
+                                <h3 class="mb-2">@Model.Nom</h3>
+                                <p class="text-muted mb-4">@Model.Marque @Model.Modele</p>
+                                
+                                <div class="d-flex mb-4 align-items-center">
+                                    <h2 class="price text-primary mb-0">@Model.PrixParJour.ToString("N0") MAD</h2>
+                                    <span class="ml-2 text-muted">/ jour</span>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <span class="badge badge-info badge-lg p-2 mr-2">@Model.Categorie</span>
+                                    <span class="badge badge-secondary badge-lg p-2 mr-2">@Model.Ville</span>
+                                    @if (Model.Etat == "Disponible")
+                                    {
+                                        <span class="badge badge-success badge-lg p-2">Disponible</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger badge-lg p-2">@Model.Etat</span>
+                                    }
+                                </div>
+
+                                @if (Model.Etat == "Disponible")
+                                {
+                                    <button type="button" class="btn btn-primary btn-lg py-3 px-5 mb-4" 
+                                            onclick="openReservationModal(@Model.Id, '@Model.Nom.Replace("'", "\\'")', '@Model.Marque', @Model.PrixParJour.ToString(System.Globalization.CultureInfo.InvariantCulture))">
+                                        <i class="fa fa-calendar-check mr-2"></i> Réserver maintenant
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary btn-lg py-3 px-5 mb-4" disabled>
+                                        <i class="fa fa-ban mr-2"></i> Non disponible actuellement
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Specifications -->
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <h4 class="mb-4 ftco-animate">Caractéristiques du véhicule</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-car fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Marque</h6>
+                                    <p class="card-text text-muted">@Model.Marque</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-tag fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Modèle</h6>
+                                    <p class="card-text text-muted">@Model.Modele</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-calendar fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Année</h6>
+                                    <p class="card-text text-muted">@(Model.AnneeMiseEnCirculation?.ToString() ?? "Non spécifié")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-palette fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Couleur</h6>
+                                    <p class="card-text text-muted">@(Model.Couleur ?? "Non spécifié")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-cogs fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Transmission</h6>
+                                    <p class="card-text text-muted">@Model.Transmission</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-gas-pump fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Carburant</h6>
+                                    <p class="card-text text-muted">@(Model.Carburant ?? "Non spécifié")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-users fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Places</h6>
+                                    <p class="card-text text-muted">@Model.NombreSieges personnes</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4 ftco-animate">
+                            <div class="card text-center h-100 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fa fa-door-open fa-2x text-primary mb-3"></i>
+                                    <h6 class="card-title">Portes</h6>
+                                    <p class="card-text text-muted">@Model.NombrePortes portes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Features -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h4 class="mb-4 ftco-animate">Équipements</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3 ftco-animate">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                @if (Model.Climatisation)
+                                {
+                                    <i class="fa fa-check-circle text-success fa-lg mr-3"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-times-circle text-danger fa-lg mr-3"></i>
+                                }
+                                <span>Climatisation</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3 ftco-animate">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                @if (Model.KilometrageIllimite)
+                                {
+                                    <i class="fa fa-check-circle text-success fa-lg mr-3"></i>
+                                    <span>Kilométrage illimité</span>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-info-circle text-warning fa-lg mr-3"></i>
+                                    <span>@(Model.KilometrageLimiteParJour?.ToString() ?? "N/A") km/jour</span>
+                                }
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.PlaqueImmatriculation))
+                        {
+                            <div class="col-md-4 mb-3 ftco-animate">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="fa fa-id-card text-primary fa-lg mr-3"></i>
+                                    <span>Immatriculation: @Model.PlaqueImmatriculation</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="row mt-5">
+                        <div class="col-md-12 text-center ftco-animate">
+                            <a asp-action="Cars" asp-controller="ClientInterface" class="btn btn-outline-primary btn-lg">
+                                <i class="fa fa-arrow-left mr-2"></i> Retour à la liste des voitures
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="ftco-section ftco-no-pt bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center ftco-animate">
+                <h3 class="mb-4">Vous avez des questions ?</h3>
+                <p class="mb-4">Notre équipe est disponible 24/7 pour répondre à toutes vos questions et vous aider à choisir le véhicule idéal pour votre voyage.</p>
+                <a asp-action="Contact" asp-controller="ClientInterface" class="btn btn-primary btn-lg mr-2">
+                    <i class="fa fa-envelope mr-2"></i> Contactez-nous
+                </a>
+                <a href="tel:+212600000000" class="btn btn-outline-primary btn-lg">
+                    <i class="fa fa-phone mr-2"></i> Appelez-nous
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Animation on scroll
+            $('.ftco-animate').each(function() {
+                $(this).addClass('fadeInUp ftco-animated');
+            });
+        });
+
+        // Variables pour la réservation
+        var selectedCarId = null;
+        var selectedCarName = '';
+        var selectedCarBrand = '';
+        var selectedCarPrice = 0;
+
+        function openReservationModal(carId, carName, carBrand, price) {
+            selectedCarId = carId;
+            selectedCarName = carName;
+            selectedCarBrand = carBrand;
+            selectedCarPrice = price;
+
+            // Mettre à jour les infos de la voiture dans le modal
+            $('#modal-car-name').text(carName);
+            $('#modal-car-brand').text(carBrand);
+            $('#modal-car-price').text(price.toLocaleString('fr-FR') + ' MAD/jour');
+
+            // Réinitialiser le formulaire
+            $('#modal-date-debut').val('');
+            $('#modal-date-fin').val('');
+            $('#availability-status').html('').hide();
+            $('#price-summary').hide();
+            $('#btn-confirm-reservation').prop('disabled', true);
+
+            // Définir la date minimale (aujourd'hui)
+            var today = new Date().toISOString().split('T')[0];
+            $('#modal-date-debut').attr('min', today);
+            $('#modal-date-fin').attr('min', today);
+
+            // Afficher le modal
+            $('#reservationModal').modal('show');
+        }
+
+        function checkAvailability() {
+            var dateDebut = $('#modal-date-debut').val();
+            var dateFin = $('#modal-date-fin').val();
+
+            if (!dateDebut || !dateFin) {
+                $('#availability-status').html('<div class="alert alert-warning"><i class="fa fa-exclamation-triangle mr-2"></i>Veuillez sélectionner les dates de début et de fin.</div>').show();
+                return;
+            }
+
+            if (new Date(dateFin) <= new Date(dateDebut)) {
+                $('#availability-status').html('<div class="alert alert-warning"><i class="fa fa-exclamation-triangle mr-2"></i>La date de fin doit être après la date de début.</div>').show();
+                return;
+            }
+
+            $('#availability-status').html('<div class="alert alert-info"><i class="fa fa-spinner fa-spin mr-2"></i>Vérification en cours...</div>').show();
+
+            $.ajax({
+                url: '@Url.Action("CheckAvailability", "ClientInterface")',
+                type: 'GET',
+                data: {
+                    voitureId: selectedCarId,
+                    dateDebut: dateDebut,
+                    dateFin: dateFin
+                },
+                success: function(response) {
+                    if (response.disponible) {
+                        $('#availability-status').html('<div class="alert alert-success"><i class="fa fa-check-circle mr-2"></i>' + response.message + '</div>').show();
+                        
+                        $('#summary-days').text(response.nombreJours);
+                        $('#summary-price-per-day').text(response.prixParJour.toLocaleString('fr-FR') + ' MAD');
+                        $('#summary-total').text(response.montantTotal.toLocaleString('fr-FR') + ' MAD');
+                        $('#price-summary').show();
+                        
+                        $('#btn-confirm-reservation').prop('disabled', false);
+                    } else {
+                        $('#availability-status').html('<div class="alert alert-danger"><i class="fa fa-times-circle mr-2"></i>' + (response.message || 'Véhicule non disponible pour ces dates.') + '</div>').show();
+                        $('#price-summary').hide();
+                        $('#btn-confirm-reservation').prop('disabled', true);
+                    }
+                },
+                error: function() {
+                    $('#availability-status').html('<div class="alert alert-danger"><i class="fa fa-times-circle mr-2"></i>Erreur lors de la vérification. Veuillez réessayer.</div>').show();
+                }
+            });
+        }
+
+        function confirmReservation() {
+            var dateDebut = $('#modal-date-debut').val();
+            var dateFin = $('#modal-date-fin').val();
+
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <text>
+                $.ajax({
+                    url: '@Url.Action("CreateReservation", "ClientInterface")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        voitureId: selectedCarId,
+                        dateDebut: dateDebut,
+                        dateFin: dateFin
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            $('#reservationModal').modal('hide');
+                            alert('Réservation effectuée avec succès !\n\nMontant total: ' + response.montantTotal + ' MAD\nN° Réservation: ' + response.reservationId);
+                            window.location.href = '@Url.Action("MesReservations", "ClientInterface")';
+                        } else {
+                            alert(response.message || 'Erreur lors de la réservation.');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            alert('Vous devez être connecté pour réserver.');
+                            window.location.href = '@Url.Action("Login", "Account")';
+                        } else {
+                            alert('Erreur lors de la réservation. Veuillez réessayer.');
+                        }
+                    }
+                });
+                </text>
+            }
+            else
+            {
+                <text>
+                window.location.href = '@Url.Action("Login", "Account")?returnUrl=' + encodeURIComponent(window.location.pathname);
+                </text>
+            }
+        }
+
+        // Mettre à jour la date minimale de fin quand la date de début change
+        $('#modal-date-debut').on('change', function() {
+            var dateDebut = $(this).val();
+            if (dateDebut) {
+                var nextDay = new Date(dateDebut);
+                nextDay.setDate(nextDay.getDate() + 1);
+                $('#modal-date-fin').attr('min', nextDay.toISOString().split('T')[0]);
+            }
+            // Réinitialiser l'état
+            $('#availability-status').html('').hide();
+            $('#price-summary').hide();
+            $('#btn-confirm-reservation').prop('disabled', true);
+        });
+
+        $('#modal-date-fin').on('change', function() {
+            // Réinitialiser l'état
+            $('#availability-status').html('').hide();
+            $('#price-summary').hide();
+            $('#btn-confirm-reservation').prop('disabled', true);
+        });
+    </script>
+}
+
+<!-- Modal de Réservation -->
+<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #fc983c; color: white;">
+                <h5 class="modal-title" id="reservationModalLabel">
+                    <i class="fa fa-calendar-check mr-2"></i>Réserver ce véhicule
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Infos voiture -->
+                <div class="car-info-summary mb-4 p-3 bg-light rounded">
+                    <h6 class="mb-1" id="modal-car-name"></h6>
+                    <p class="text-muted mb-1" id="modal-car-brand"></p>
+                    <strong class="text-primary" id="modal-car-price"></strong>
+                </div>
+
+                <!-- Formulaire de dates -->
+                <div class="form-group">
+                    <label for="modal-date-debut"><i class="fa fa-calendar mr-2"></i>Date de début</label>
+                    <input type="date" class="form-control" id="modal-date-debut" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-date-fin"><i class="fa fa-calendar mr-2"></i>Date de fin</label>
+                    <input type="date" class="form-control" id="modal-date-fin" required>
+                </div>
+
+                <!-- Statut de disponibilité -->
+                <div id="availability-status" style="display: none;"></div>
+
+                <!-- Résumé du prix -->
+                <div id="price-summary" class="mt-3 p-3 bg-light rounded" style="display: none;">
+                    <h6 class="mb-3">Résumé de la réservation</h6>
+                    <div class="d-flex justify-content-between">
+                        <span>Nombre de jours:</span>
+                        <strong id="summary-days"></strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Prix par jour:</span>
+                        <strong id="summary-price-per-day"></strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Total:</strong></span>
+                        <strong class="text-primary" id="summary-total"></strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-info" onclick="checkAvailability()">
+                    <i class="fa fa-search mr-2"></i>Vérifier disponibilité
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-confirm-reservation" onclick="confirmReservation()" disabled>
+                    <i class="fa fa-check mr-2"></i>Confirmer la réservation
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()

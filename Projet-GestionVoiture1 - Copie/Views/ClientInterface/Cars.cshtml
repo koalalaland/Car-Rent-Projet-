@@ -1,0 +1,538 @@
+@model IEnumerable<Projet_GestionVoiture1.Models.Voiture>
+@{
+    ViewData["Title"] = "Our Cars - Autoroad Car Rental";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* 4 voitures par ligne sur grands écrans */
+    @@media (min-width: 992px) {
+        .car-grid-item {
+            flex: 0 0 25% !important;
+            max-width: 25% !important;
+        }
+    }
+    /* 3 voitures par ligne sur tablettes */
+    @@media (min-width: 768px) and (max-width: 991px) {
+        .car-grid-item {
+            flex: 0 0 33.333% !important;
+            max-width: 33.333% !important;
+        }
+    }
+    /* 2 voitures par ligne sur petits écrans */
+    @@media (min-width: 576px) and (max-width: 767px) {
+        .car-grid-item {
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+        }
+    }
+    /* 1 voiture par ligne sur mobile */
+    @@media (max-width: 575px) {
+        .car-grid-item {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
+    }
+    
+    .car-wrap {
+        height: 100%;
+    }
+    
+    .car-wrap .img {
+        height: 180px;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    .car-wrap .text h2 {
+        font-size: 1rem;
+    }
+    
+    .car-wrap .text h2 a {
+        font-size: 0.95rem;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('@Url.Content("~/images/bg_2.jpg")');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="@Url.Action("Home", "ClientInterface")">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Our Cars <i class="ion-ios-arrow-forward"></i></span></p>
+                <h1 class="mb-3 bread">Our Cars</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search Filter Section -->
+<section class="ftco-section ftco-no-pb ftco-no-pt bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="search-wrap-1 ftco-animate p-4">
+                    <form asp-action="Cars" asp-controller="ClientInterface" method="get" class="search-property-1">
+                        <div class="row">
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="marque">Marque</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="marque" id="marque" class="form-control">
+                                                <option value="">Toutes les marques</option>
+                                                @if (ViewBag.AllMarques != null)
+                                                {
+                                                    @foreach (var marque in ViewBag.AllMarques)
+                                                    {
+                                                        <option value="@marque" selected="@(ViewBag.SelectedMarque == marque ? "selected" : null)">@marque</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="categorie">Catégorie</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="categorie" id="categorie" class="form-control">
+                                                <option value="">Toutes les catégories</option>
+                                                @if (ViewBag.AllCategories != null)
+                                                {
+                                                    @foreach (var categorie in ViewBag.AllCategories)
+                                                    {
+                                                        <option value="@categorie" selected="@(ViewBag.SelectedCategorie == categorie ? "selected" : null)">@categorie</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="ville">Ville</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="ville" id="ville" class="form-control">
+                                                <option value="">Toutes les villes</option>
+                                                @if (ViewBag.AllVilles != null)
+                                                {
+                                                    @foreach (var ville in ViewBag.AllVilles)
+                                                    {
+                                                        <option value="@ville" selected="@(ViewBag.SelectedVille == ville ? "selected" : null)">@ville</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="transmission">Transmission</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="transmission" id="transmission" class="form-control">
+                                                <option value="">Toutes</option>
+                                                <option value="Manuelle" selected="@(ViewBag.SelectedTransmission == "Manuelle" ? "selected" : null)">Manuelle</option>
+                                                <option value="Automatique" selected="@(ViewBag.SelectedTransmission == "Automatique" ? "selected" : null)">Automatique</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-self-end">
+                                <div class="form-group">
+                                    <div class="form-field">
+                                        <input type="submit" value="Rechercher" class="form-control btn btn-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cars List Section -->
+<section class="ftco-section bg-light">
+    <div class="container-fluid px-4">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Découvrez notre flotte</span>
+                <h2 class="mb-2">Choisissez Votre Voiture</h2>
+                <p>Nous offrons une large gamme de véhicules pour répondre à tous vos besoins de location.</p>
+            </div>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row">
+                @foreach (var car in Model)
+                {
+                    <div class="car-grid-item mb-4">
+                        <div class="car-wrap ftco-animate rounded shadow">
+                            <div class="img rounded d-flex align-items-end" style="background-image: url('@Url.Content(string.IsNullOrEmpty(car.ImageUrl) ? "~/images/car-1.jpg" : car.ImageUrl)');">
+                                <div class="price-wrap d-flex">
+                                    <span class="rate">@car.PrixParJour.ToString("N0") MAD</span>
+                                    <p class="from-day">
+                                        <span>Par</span>
+                                        <span>/Jour</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text p-3 text-center">
+                                <h2 class="mb-0">
+                                    <a href="@Url.Action("CarDetails", "ClientInterface", new { id = car.Id })">@car.Nom</a>
+                                </h2>
+                                <div class="d-flex mb-2 justify-content-center">
+                                    <span class="cat text-muted small">@car.Marque @car.Modele</span>
+                                </div>
+                                <p class="mb-2">
+                                    <span class="badge badge-info badge-sm">@car.Categorie</span>
+                                    @if (car.Etat == "Disponible")
+                                    {
+                                        <span class="badge badge-success">Disponible</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger">@car.Etat</span>
+                                    }
+                                </p>
+                                <div class="d-flex justify-content-center mb-2 text-muted small flex-wrap">
+                                    <span class="mr-2"><i class="fa fa-map-marker-alt"></i> @car.Ville</span>
+                                    <span class="mr-2"><i class="fa fa-cog"></i> @car.Transmission</span>
+                                    <span class="mr-2"><i class="fa fa-user"></i> @car.NombreSieges</span>
+                                    <span><i class="fa fa-door-open"></i> @car.NombrePortes</span>
+                                </div>
+                                <p class="d-flex mb-0 d-block justify-content-center">
+                                    @if (car.Etat == "Disponible")
+                                    {
+                                        <button type="button" class="btn btn-primary py-2 mr-1" onclick="openReservationModalDirect(@car.Id, '@car.Nom', '@car.Categorie', '@car.Ville', @car.PrixParJour, '@(string.IsNullOrEmpty(car.ImageUrl) ? "/images/car-1.jpg" : car.ImageUrl)')">
+                                            <i class="fa fa-calendar-check mr-1"></i> Réserver
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-secondary py-2 mr-1" disabled>
+                                            <i class="fa fa-ban mr-1"></i> Non disponible
+                                        </button>
+                                    }
+                                    <a asp-action="CarDetails" asp-controller="ClientInterface" asp-route-id="@car.Id" class="btn btn-secondary py-2 ml-1">
+                                        <i class="fa fa-info-circle mr-1"></i> Détails
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-info text-center ftco-animate">
+                        <i class="fa fa-info-circle fa-2x mb-3"></i>
+                        <h4>Aucune voiture disponible pour le moment</h4>
+                        <p>Veuillez réessayer plus tard ou modifier vos critères de recherche.</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="ftco-section ftco-no-pt ftco-no-pb">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url('@Url.Content("~/images/about.jpg")');">
+            </div>
+            <div class="col-md-6 wrap-about py-md-5 ftco-animate">
+                <div class="heading-section mb-5 pl-md-5">
+                    <span class="subheading">Pourquoi nous choisir ?</span>
+                    <h2 class="mb-4">Une expérience de location exceptionnelle</h2>
+                    <p>Nous nous engageons à vous offrir le meilleur service de location de voitures avec des véhicules de qualité, des prix compétitifs et un service client irréprochable.</p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon mr-3"><span class="flaticon-customer-support"></span></div>
+                                <div class="text">
+                                    <h4 class="m-0">Support 24/7</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon mr-3"><span class="flaticon-route"></span></div>
+                                <div class="text">
+                                    <h4 class="m-0">Plusieurs villes</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon mr-3"><span class="flaticon-rent"></span></div>
+                                <div class="text">
+                                    <h4 class="m-0">Prix compétitifs</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon mr-3"><span class="flaticon-car"></span></div>
+                                <div class="text">
+                                    <h4 class="m-0">Véhicules récents</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-4"><a asp-action="Contact" asp-controller="ClientInterface" class="btn btn-primary">Contactez-nous</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODAL POUR LA RÉSERVATION -->
+<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #fc983c; color: white;">
+                <h5 class="modal-title" id="reservationModalLabel"><i class="fa fa-car mr-2"></i>Réserver cette voiture</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div id="reservationCarInfo" class="mb-3 p-3 bg-light rounded">
+                    <!-- Info voiture sera injectée ici -->
+                </div>
+                
+                <form id="reservationForm">
+                    <input type="hidden" id="reservationVoitureId" name="voitureId">
+                    
+                    <div class="form-group mb-3">
+                        <label for="dateDebut"><strong><i class="fa fa-calendar-alt mr-1"></i> Date de début</strong></label>
+                        <input type="date" class="form-control" id="dateDebut" name="dateDebut" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="dateFin"><strong><i class="fa fa-calendar-alt mr-1"></i> Date de fin</strong></label>
+                        <input type="date" class="form-control" id="dateFin" name="dateFin" required>
+                    </div>
+                    
+                    <div id="availabilityStatus" class="mb-3" style="display: none;">
+                        <!-- Statut de disponibilité -->
+                    </div>
+                    
+                    <div id="priceSummary" class="p-3 bg-light rounded mb-3" style="display: none;">
+                        <h6><i class="fa fa-receipt mr-1"></i> Récapitulatif</h6>
+                        <p class="mb-1">Nombre de jours : <strong id="nombreJours">0</strong></p>
+                        <p class="mb-1">Prix par jour : <strong id="prixJour">0</strong> MAD</p>
+                        <hr>
+                        <p class="mb-0 h5">Total : <strong class="text-danger" id="montantTotal">0</strong> MAD</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" id="checkAvailabilityBtn" class="btn btn-info" onclick="checkAvailability()">
+                    <i class="fa fa-search mr-1"></i> Vérifier disponibilité
+                </button>
+                <button type="button" id="confirmReservationBtn" class="btn btn-success" onclick="confirmReservation()" disabled>
+                    <i class="fa fa-check-circle mr-1"></i> Confirmer la réservation
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentCarId = null;
+        let currentCarData = null;
+        let isAvailable = false;
+
+        function openReservationModalDirect(carId, carName, categorie, ville, prixParJour, imageUrl) {
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <text>
+                currentCarId = carId;
+                currentCarData = {
+                    nom: carName,
+                    categorie: categorie,
+                    ville: ville,
+                    prixParJour: prixParJour,
+                    imageUrl: imageUrl
+                };
+                
+                document.getElementById('reservationCarInfo').innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <img src="${imageUrl}" alt="${carName}" style="width: 80px; height: 60px; object-fit: cover; border-radius: 5px;" class="mr-3">
+                        <div class="ml-3">
+                            <h6 class="mb-0">${carName}</h6>
+                            <small class="text-muted">${categorie} • ${ville}</small><br>
+                            <strong class="text-danger">${prixParJour} MAD/jour</strong>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('reservationVoitureId').value = carId;
+                
+                // Réinitialiser le formulaire
+                document.getElementById('dateDebut').value = '';
+                document.getElementById('dateFin').value = '';
+                document.getElementById('availabilityStatus').style.display = 'none';
+                document.getElementById('priceSummary').style.display = 'none';
+                document.getElementById('confirmReservationBtn').disabled = true;
+                isAvailable = false;
+                
+                // Définir la date minimum (aujourd'hui)
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('dateDebut').min = today;
+                document.getElementById('dateFin').min = today;
+                
+                // Ouvrir la modal de réservation
+                $('#reservationModal').modal('show');
+                </text>
+            }
+            else
+            {
+                <text>
+                alert('Vous devez être connecté pour réserver une voiture.');
+                window.location.href = '/Account/Login';
+                </text>
+            }
+        }
+
+        async function checkAvailability() {
+            const voitureId = document.getElementById('reservationVoitureId').value;
+            const dateDebut = document.getElementById('dateDebut').value;
+            const dateFin = document.getElementById('dateFin').value;
+            
+            if (!dateDebut || !dateFin) {
+                alert('Veuillez sélectionner les dates de début et de fin.');
+                return;
+            }
+            
+            if (new Date(dateFin) <= new Date(dateDebut)) {
+                alert('La date de fin doit être après la date de début.');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/ClientInterface/CheckAvailability?voitureId=${voitureId}&dateDebut=${dateDebut}&dateFin=${dateFin}`);
+                const result = await response.json();
+                
+                const statusDiv = document.getElementById('availabilityStatus');
+                const priceDiv = document.getElementById('priceSummary');
+                const confirmBtn = document.getElementById('confirmReservationBtn');
+                
+                statusDiv.style.display = 'block';
+                
+                if (result.disponible) {
+                    statusDiv.innerHTML = `<div class="alert alert-success"><strong><i class="fa fa-check-circle mr-1"></i> ${result.message}</strong></div>`;
+                    priceDiv.style.display = 'block';
+                    document.getElementById('nombreJours').textContent = result.nombreJours;
+                    document.getElementById('prixJour').textContent = result.prixParJour;
+                    document.getElementById('montantTotal').textContent = result.montantTotal;
+                    confirmBtn.disabled = false;
+                    isAvailable = true;
+                } else {
+                    statusDiv.innerHTML = `<div class="alert alert-danger"><strong><i class="fa fa-times-circle mr-1"></i> ${result.message}</strong></div>`;
+                    priceDiv.style.display = 'none';
+                    confirmBtn.disabled = true;
+                    isAvailable = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erreur lors de la vérification de disponibilité.');
+            }
+        }
+
+        async function confirmReservation() {
+            if (!isAvailable) {
+                alert('Veuillez d\'abord vérifier la disponibilité.');
+                return;
+            }
+            
+            const voitureId = parseInt(document.getElementById('reservationVoitureId').value);
+            const dateDebut = document.getElementById('dateDebut').value;
+            const dateFin = document.getElementById('dateFin').value;
+            
+            try {
+                const response = await fetch('/ClientInterface/CreateReservation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        voitureId: voitureId,
+                        dateDebut: dateDebut,
+                        dateFin: dateFin
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    $('#reservationModal').modal('hide');
+                    alert(`${result.message}\n\nMontant total: ${result.montantTotal} MAD\nN° Réservation: ${result.reservationId}`);
+                    // Recharger la page pour mettre à jour l'état des voitures
+                    location.reload();
+                } else {
+                    alert(`Erreur: ${result.message}`);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erreur lors de la création de la réservation.');
+            }
+        }
+        
+        // Mettre à jour la date de fin minimum quand la date de début change
+        $(document).ready(function() {
+            // Animation on scroll
+            $('.ftco-animate').each(function() {
+                $(this).addClass('fadeInUp ftco-animated');
+            });
+            
+            const dateDebutInput = document.getElementById('dateDebut');
+            const dateFinInput = document.getElementById('dateFin');
+            
+            if (dateDebutInput && dateFinInput) {
+                dateDebutInput.addEventListener('change', function() {
+                    dateFinInput.min = this.value;
+                    // Réinitialiser si la date de fin est avant la nouvelle date de début
+                    if (dateFinInput.value && dateFinInput.value <= this.value) {
+                        dateFinInput.value = '';
+                    }
+                    // Réinitialiser le statut
+                    document.getElementById('availabilityStatus').style.display = 'none';
+                    document.getElementById('priceSummary').style.display = 'none';
+                    document.getElementById('confirmReservationBtn').disabled = true;
+                    isAvailable = false;
+                });
+                
+                dateFinInput.addEventListener('change', function() {
+                    // Réinitialiser le statut
+                    document.getElementById('availabilityStatus').style.display = 'none';
+                    document.getElementById('priceSummary').style.display = 'none';
+                    document.getElementById('confirmReservationBtn').disabled = true;
+                    isAvailable = false;
+                });
+            }
+        });
+    </script>
+}

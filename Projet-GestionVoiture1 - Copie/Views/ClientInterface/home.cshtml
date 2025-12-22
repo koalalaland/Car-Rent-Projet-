@@ -1,0 +1,735 @@
+﻿@model IEnumerable<Voiture>
+@{
+    ViewData["Title"] = "Accueil - AutoRoad Location de Voitures";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // RÃ©cupÃ©rer les listes pour les filtres
+    var marques = ViewBag.Marques as List<string> ?? new List<string>();
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+    var villes = ViewBag.Villes as List<string> ?? new List<string>();
+}
+
+<div class="hero-wrap" style="background-image: url('@Url.Content("~/images/bg_1.jpg")');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text justify-content-start align-items-center">
+            <div class="col-lg-6 col-md-6 ftco-animate d-flex align-items-end">
+                <div class="text">
+                    <h1 class="mb-4">Maintenant <span>C'est facile</span> <span>de louer une voiture</span></h1>
+                    <p style="font-size: 18px;">DÃ©couvrez notre large gamme de vÃ©hicules disponibles Ã  la location. Une expÃ©rience de conduite exceptionnelle vous attend.</p>
+                    <a href="https://vimeo.com/45830194" class="icon-wrap popup-vimeo d-flex align-items-center mt-4">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="ion-ios-play"></span>
+                        </div>
+                        <div class="heading-title ml-5">
+                            <span>Ã‰tapes simples pour louer une voiture</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-2 col"></div>
+            <div class="col-lg-4 col-md-6 mt-0 mt-md-5 d-flex">
+                <form action="#" class="request-form ftco-animate">
+                    <h2>Planifiez votre trajet</h2>
+                    <div class="form-group">
+                        <label for="" class="label">Lieu de prise en charge</label>
+                        <input type="text" class="form-control" placeholder="Ville, AÃ©roport, Gare, etc">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="label">Drop-off location</label>
+                        <input type="text" class="form-control" placeholder="City, Airport, Station, etc">
+                    </div>
+                    <div class="d-flex">
+                        <div class="form-group mr-2">
+                            <label for="" class="label">Pick-up date</label>
+                            <input type="text" class="form-control" id="book_pick_date" placeholder="Date">
+                        </div>
+                        <div class="form-group ml-2">
+                            <label for="" class="label">Drop-off date</label>
+                            <input type="text" class="form-control" id="book_off_date" placeholder="Date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="label">Pick-up time</label>
+                        <input type="text" class="form-control" id="time_pick" placeholder="Time">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Search Vehicle" class="btn btn-primary py-3 px-4">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftco-no-pb ftco-no-pt">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="search-wrap-1 ftco-animate mb-5">
+                    <form asp-controller="ClientInterface" asp-action="Search" method="get" class="search-property-1">
+                        <div class="row no-gutters">
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="marque">Marque</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="marque" id="marque" class="form-control">
+                                                <option value="">Toutes les marques</option>
+                                                @foreach (var m in marques)
+                                                {
+                                                    <option value="@m">@m</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="categorie">Catégorie</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="categorie" id="categorie" class="form-control">
+                                                <option value="">Toutes les catégories</option>
+                                                @foreach (var c in categories)
+                                                {
+                                                    <option value="@c">@c</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="ville">Ville</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="ville" id="ville" class="form-control">
+                                                <option value="">Toutes les villes</option>
+                                                @foreach (var v in villes)
+                                                {
+                                                    <option value="@v">@v</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="transmission">Transmission</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="transmission" id="transmission" class="form-control">
+                                                <option value="">Toutes</option>
+                                                <option value="Automatique">Automatique</option>
+                                                <option value="Manuelle">Manuelle</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg align-self-end">
+                                <div class="form-group">
+                                    <div class="form-field">
+                                        <input type="submit" value="Rechercher" class="form-control btn btn-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section services-section ftco-no-pt ftco-no-pb">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+                <span class="subheading">Nos Services</span>
+                <h2 class="mb-2">Nos Services</h2>
+            </div>
+        </div>
+        <div class="row d-flex">
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon"><span class="flaticon-customer-support"></span></div>
+                            <h3 class="heading mb-0 pl-3">Support 24/7</h3>
+                        </div>
+                        <p>Notre équipe est disponible à tout moment pour vous assister</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon"><span class="flaticon-route"></span></div>
+                            <h3 class="heading mb-0 pl-3">Lots of location</h3>
+                        </div>
+                        <p>A small river named Duden flows by their place and supplies it with you</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon"><span class="flaticon-online-booking"></span></div>
+                            <h3 class="heading mb-0 pl-3">Reservation</h3>
+                        </div>
+                        <p>A small river named Duden flows by their place and supplies it with you</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon"><span class="flaticon-rent"></span></div>
+                            <h3 class="heading mb-0 pl-3">Rental Cars</h3>
+                        </div>
+                        <p>A small river named Duden flows by their place and supplies it with you</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container-fluid px-4">
+        <div class="row justify-content-center">
+            <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+                <span class="subheading">What we offer</span>
+                <h2 class="mb-2">Choose Your Car</h2>
+            </div>
+        </div>
+        <div class="row">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var car in Model.Take(8))
+                {
+                    <div class="col-md-3">
+                        <div class="car-wrap ftco-animate">
+                            <div class="img d-flex align-items-end" style="background-image: url('@Url.Content(string.IsNullOrEmpty(car.ImageUrl) ? "~/images/car-1.jpg" : car.ImageUrl)');">
+                                <div class="price-wrap d-flex">
+                                    <span class="rate">@car.PrixParJour MAD</span>
+                                    <p class="from-day">
+                                        <span>From</span>
+                                        <span>/Day</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text p-4 text-center">
+                                <h2 class="mb-0"><a href="@Url.Action("CarDetails", "ClientInterface", new { id = car.Id })">@car.Marque @car.Modele</a></h2>
+                                <span>@car.Categorie</span>
+                                <p class="d-flex mb-0 d-block">
+                                    <a asp-action="Create" asp-controller="Reservations" asp-route-carId="@car.Id" class="btn btn-black btn-outline-black mr-1">Book now</a>
+                                    <a asp-action="CarDetails" asp-controller="ClientInterface" asp-route-id="@car.Id" class="btn btn-black btn-outline-black ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-12 text-center">
+                    <p>No cars available at the moment.</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section id="guide" class="ftco-section services-section img" style="background-image: url('@Url.Content("~/images/bg_2.jpg")');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                <span class="subheading">Work flow</span>
+                <h2 class="mb-3">How it works</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services services-2">
+                    <div class="media-body py-md-4 text-center">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
+                        <h3>Pick Destination</h3>
+                        <p>A small river named Duden flows by their place and supplies it with you</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services services-2">
+                    <div class="media-body py-md-4 text-center">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-select"></span></div>
+                        <h3>Select Term</h3>
+                        <p>A small river named Duden flows by their place and supplies it with you</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services services-2">
+                    <div class="media-body py-md-4 text-center">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
+                        <h3>Choose A Car</h3>
+                        <p>A small river named Duden flows by their place and supplies it with you</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services services-2">
+                    <div class="media-body py-md-4 text-center">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-review"></span></div>
+                        <h3>Enjoy The Ride</h3>
+                        <p>A small river named Duden flows by their place and supplies it with you</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section testimony-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading">Testimonial</span>
+                <h2 class="mb-3">Happy Clients</h2>
+            </div>
+        </div>
+        <div class="row ftco-animate">
+            <div class="col-md-12">
+                <div class="carousel-testimony owl-carousel ftco-owl">
+                    <div class="item">
+                        <div class="testimony-wrap text-center py-4 pb-5">
+                            <div class="user-img mb-4" style="background-image: url('@Url.Content("~/images/person_1.jpg")')">
+                            </div>
+                            <div class="text pt-4">
+                                <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                <p class="name">Roger Scott</p>
+                                <span class="position">Marketing Manager</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="testimony-wrap text-center py-4 pb-5">
+                            <div class="user-img mb-4" style="background-image: url('@Url.Content("~/images/person_2.jpg")')">
+                            </div>
+                            <div class="text pt-4">
+                                <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                <p class="name">Roger Scott</p>
+                                <span class="position">Interface Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="testimony-wrap text-center py-4 pb-5">
+                            <div class="user-img mb-4" style="background-image: url('@Url.Content("~/images/person_3.jpg")')">
+                            </div>
+                            <div class="text pt-4">
+                                <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                                <p class="name">Roger Scott</p>
+                                <span class="position">UI Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section ftco-no-pt ftco-no-pb" id="about">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url('@Url.Content("~/images/about.jpg")');">
+            </div>
+            <div class="col-md-6 wrap-about py-md-5 ftco-animate">
+                <div class="heading-section mb-5 pl-md-5">
+                    <span class="subheading">About us</span>
+                    <h2 class="mb-4">Choose A Perfect Car</h2>
+                    <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+                    <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country.</p>
+                    <p><a asp-action="Cars" asp-controller="ClientInterface" class="btn btn-primary">Search Vehicle</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <span class="subheading">Blog</span>
+                <h2>Recent Blog</h2>
+            </div>
+        </div>
+        <div class="row d-flex">
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry justify-content-end">
+                    <a asp-action="Blog" asp-controller="ClientInterface" class="block-20" style="background-image: url('@Url.Content("~/images/image_1.jpg")');">
+                    </a>
+                    <div class="text pt-4">
+                        <div class="meta mb-3">
+                            <div><a href="#">July. 24, 2019</a></div>
+                            <div><a href="#">Admin</a></div>
+                            <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                        </div>
+                        <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
+                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry justify-content-end">
+                    <a asp-action="Blog" asp-controller="ClientInterface" class="block-20" style="background-image: url('@Url.Content("~/images/image_2.jpg")');">
+                    </a>
+                    <div class="text pt-4">
+                        <div class="meta mb-3">
+                            <div><a href="#">July. 24, 2019</a></div>
+                            <div><a href="#">Admin</a></div>
+                            <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                        </div>
+                        <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
+                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry">
+                    <a asp-action="Blog" asp-controller="ClientInterface" class="block-20" style="background-image: url('@Url.Content("~/images/image_3.jpg")');">
+                    </a>
+                    <div class="text pt-4">
+                        <div class="meta mb-3">
+                            <div><a href="#">July. 24, 2019</a></div>
+                            <div><a href="#">Admin</a></div>
+                            <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                        </div>
+                        <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
+                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODAL POUR LES DÉTAILS DE LA VOITURE -->
+<div class="modal fade" id="carDetailsModal" tabindex="-1" role="dialog" aria-labelledby="carDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="carDetailsModalLabel">Détails de la voiture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">
+                    <p>Chargement...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="bookNowBtn" class="btn btn-primary" onclick="openReservationModal()">Réserver maintenant</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL POUR LA RÉSERVATION -->
+<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="reservationModalLabel"><i class="fas fa-car me-2"></i>Réserver cette voiture</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div id="reservationCarInfo" class="mb-3 p-3 bg-light rounded">
+                    <!-- Info voiture sera injectï¿½e ici -->
+                </div>
+                
+                <form id="reservationForm">
+                    <input type="hidden" id="reservationVoitureId" name="voitureId">
+                    
+                    <div class="form-group mb-3">
+                        <label for="dateDebut"><strong><i class="fas fa-calendar-alt me-1"></i> Date de dï¿½but</strong></label>
+                        <input type="date" class="form-control" id="dateDebut" name="dateDebut" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="dateFin"><strong><i class="fas fa-calendar-alt me-1"></i> Date de fin</strong></label>
+                        <input type="date" class="form-control" id="dateFin" name="dateFin" required>
+                    </div>
+                    
+                    <div id="availabilityStatus" class="mb-3" style="display: none;">
+                        <!-- Statut de disponibilitï¿½ -->
+                    </div>
+                    
+                    <div id="priceSummary" class="p-3 bg-light rounded mb-3" style="display: none;">
+                        <h6><i class="fas fa-receipt me-1"></i> Rï¿½capitulatif</h6>
+                        <p class="mb-1">Nombre de jours : <strong id="nombreJours">0</strong></p>
+                        <p class="mb-1">Prix par jour : <strong id="prixJour">0</strong> MAD</p>
+                        <hr>
+                        <p class="mb-0 h5">Total : <strong class="text-danger" id="montantTotal">0</strong> MAD</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" id="checkAvailabilityBtn" class="btn btn-info" onclick="checkAvailability()">
+                    <i class="fas fa-search me-1"></i> Vï¿½rifier disponibilitï¿½
+                </button>
+                <button type="button" id="confirmReservationBtn" class="btn btn-success" onclick="confirmReservation()" disabled>
+                    <i class="fas fa-check-circle me-1"></i> Confirmer la rï¿½servation
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentCarId = null;
+        let currentCarData = null;
+        let isAvailable = false;
+
+        async function loadCarDetails(carId) {
+            try {
+                const response = await fetch(`/ClientInterface/GetCarDetails?id=${carId}`);
+                if (!response.ok) throw new Error('Voiture introuvable');
+
+                const car = await response.json();
+                currentCarId = carId;
+                currentCarData = car;
+                console.log('Car data:', car);
+                
+                const modalContent = document.getElementById('modalContent');
+                const imageUrl = car.imageUrl || '/images/car-1.jpg';
+
+                const kmText = car.kilometrageIllimite
+                    ? '<span class="badge bg-success"><i class="fas fa-infinity me-1"></i> Kilomï¿½trage illimitï¿½</span>'
+                    : `<span class="badge bg-warning text-dark"><i class="fas fa-road me-1"></i> ${car.kilometrageLimiteParJour || 'N/A'} km/jour</span>`;
+
+                const displayName = car.nom || `${car.marque} ${car.modele}`;
+
+                modalContent.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="${imageUrl}" class="img-fluid rounded" alt="${displayName}" style="max-height: 300px; object-fit: contain;">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>${displayName}</h4>
+                            <p><strong>Catï¿½gorie :</strong> ${car.categorie || 'N/A'}</p>
+                            <p><strong>Ville :</strong> ${car.ville || 'N/A'}</p>
+                            <p><strong>Prix/jour :</strong> <span class="text-danger fw-bold">${car.prixParJour || 'N/A'} MAD</span></p>
+                            <p><strong>ï¿½tat :</strong> ${car.etat || 'N/A'}</p>
+                            <p><strong>Annï¿½e :</strong> ${car.anneeMiseEnCirculation || 'N/A'}</p>
+                            <p><strong>Couleur :</strong> ${car.couleur || 'N/A'}</p>
+                            <p><strong>Transmission :</strong> ${car.transmission || 'N/A'}</p>
+                            <p><strong>Carburant :</strong> ${car.carburant || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="mt-3">
+                        <h6>Caractï¿½ristiques</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark"><i class="fas fa-snowflake me-1"></i> Climatisation</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-door-open me-1"></i> ${car.nombrePortes || 5} portes</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-users me-1"></i> ${car.nombreSieges || 5} siï¿½ges</span>
+                            ${kmText}
+                        </div>
+                    </div>
+                `;
+
+                $('#carDetailsModal').modal('show');
+            } catch (err) {
+                alert("Impossible de charger les dï¿½tails de cette voiture.");
+                console.error(err);
+            }
+        }
+
+        function openReservationModal() {
+            @if (User.Identity.IsAuthenticated)
+            {
+                <text>
+                // Fermer la modal des dï¿½tails
+                $('#carDetailsModal').modal('hide');
+                
+                // Prï¿½parer la modal de rï¿½servation
+                const displayName = currentCarData.nom || `${currentCarData.marque} ${currentCarData.modele}`;
+                const imageUrl = currentCarData.imageUrl || '/images/car-1.jpg';
+                
+                document.getElementById('reservationCarInfo').innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <img src="${imageUrl}" alt="${displayName}" style="width: 80px; height: 60px; object-fit: cover; border-radius: 5px;" class="mr-3">
+                        <div class="ml-3">
+                            <h6 class="mb-0">${displayName}</h6>
+                            <small class="text-muted">${currentCarData.categorie} ï¿½ ${currentCarData.ville}</small><br>
+                            <strong class="text-danger">${currentCarData.prixParJour} MAD/jour</strong>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('reservationVoitureId').value = currentCarId;
+                
+                // Rï¿½initialiser le formulaire
+                document.getElementById('dateDebut').value = '';
+                document.getElementById('dateFin').value = '';
+                document.getElementById('availabilityStatus').style.display = 'none';
+                document.getElementById('priceSummary').style.display = 'none';
+                document.getElementById('confirmReservationBtn').disabled = true;
+                isAvailable = false;
+                
+                // Dï¿½finir la date minimum (aujourd'hui)
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('dateDebut').min = today;
+                document.getElementById('dateFin').min = today;
+                
+                // Ouvrir la modal de rï¿½servation
+                setTimeout(() => {
+                    $('#reservationModal').modal('show');
+                }, 300);
+                </text>
+            }
+            else
+            {
+                <text>
+                alert('Vous devez ï¿½tre connectï¿½ pour rï¿½server une voiture.');
+                window.location.href = '/Account/Login';
+                </text>
+            }
+        }
+
+        async function checkAvailability() {
+            const voitureId = document.getElementById('reservationVoitureId').value;
+            const dateDebut = document.getElementById('dateDebut').value;
+            const dateFin = document.getElementById('dateFin').value;
+            
+            if (!dateDebut || !dateFin) {
+                alert('Veuillez sï¿½lectionner les dates de dï¿½but et de fin.');
+                return;
+            }
+            
+            if (new Date(dateFin) <= new Date(dateDebut)) {
+                alert('La date de fin doit ï¿½tre aprï¿½s la date de dï¿½but.');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/ClientInterface/CheckAvailability?voitureId=${voitureId}&dateDebut=${dateDebut}&dateFin=${dateFin}`);
+                const result = await response.json();
+                
+                const statusDiv = document.getElementById('availabilityStatus');
+                const priceDiv = document.getElementById('priceSummary');
+                const confirmBtn = document.getElementById('confirmReservationBtn');
+                
+                statusDiv.style.display = 'block';
+                
+                if (result.disponible) {
+                    statusDiv.innerHTML = `<div class="alert alert-success"><strong><i class="fas fa-check-circle me-1"></i> ${result.message}</strong></div>`;
+                    priceDiv.style.display = 'block';
+                    document.getElementById('nombreJours').textContent = result.nombreJours;
+                    document.getElementById('prixJour').textContent = result.prixParJour;
+                    document.getElementById('montantTotal').textContent = result.montantTotal;
+                    confirmBtn.disabled = false;
+                    isAvailable = true;
+                } else {
+                    statusDiv.innerHTML = `<div class="alert alert-danger"><strong><i class="fas fa-times-circle me-1"></i> ${result.message}</strong></div>`;
+                    priceDiv.style.display = 'none';
+                    confirmBtn.disabled = true;
+                    isAvailable = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erreur lors de la vï¿½rification de disponibilitï¿½.');
+            }
+        }
+
+        async function confirmReservation() {
+            if (!isAvailable) {
+                alert('Veuillez d\'abord vï¿½rifier la disponibilitï¿½.');
+                return;
+            }
+            
+            const voitureId = parseInt(document.getElementById('reservationVoitureId').value);
+            const dateDebut = document.getElementById('dateDebut').value;
+            const dateFin = document.getElementById('dateFin').value;
+            
+            try {
+                const response = await fetch('/ClientInterface/CreateReservation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        voitureId: voitureId,
+                        dateDebut: dateDebut,
+                        dateFin: dateFin
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    $('#reservationModal').modal('hide');
+                    alert(`${result.message}\n\nMontant total: ${result.montantTotal} MAD\nNï¿½ Rï¿½servation: ${result.reservationId}`);
+                    // Optionnel: rediriger vers la page des rï¿½servations
+                    // window.location.href = '/ClientInterface/MesReservations';
+                } else {
+                    alert(`Erreur: ${result.message}`);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erreur lors de la crï¿½ation de la rï¿½servation.');
+            }
+        }
+        
+        // Mettre ï¿½ jour la date de fin minimum quand la date de dï¿½but change
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateDebutInput = document.getElementById('dateDebut');
+            const dateFinInput = document.getElementById('dateFin');
+            
+            if (dateDebutInput && dateFinInput) {
+                dateDebutInput.addEventListener('change', function() {
+                    dateFinInput.min = this.value;
+                    // Rï¿½initialiser si la date de fin est avant la nouvelle date de dï¿½but
+                    if (dateFinInput.value && dateFinInput.value <= this.value) {
+                        dateFinInput.value = '';
+                    }
+                    // Rï¿½initialiser le statut
+                    document.getElementById('availabilityStatus').style.display = 'none';
+                    document.getElementById('priceSummary').style.display = 'none';
+                    document.getElementById('confirmReservationBtn').disabled = true;
+                    isAvailable = false;
+                });
+                
+                dateFinInput.addEventListener('change', function() {
+                    // Rï¿½initialiser le statut
+                    document.getElementById('availabilityStatus').style.display = 'none';
+                    document.getElementById('priceSummary').style.display = 'none';
+                    document.getElementById('confirmReservationBtn').disabled = true;
+                    isAvailable = false;
+                });
+            }
+        });
+    </script>
+}

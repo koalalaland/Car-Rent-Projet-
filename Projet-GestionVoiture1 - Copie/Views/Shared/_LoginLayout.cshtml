@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - AutoRoad</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/animate.css">
+    <link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    
+    <style>
+        .login-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('/images/bg_1.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+        }
+        .login-wrap {
+            position: relative;
+            z-index: 1;
+            background: #fff;
+            border-radius: 10px;
+            max-width: 550px;
+            width: 100%;
+            margin: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
+        .login-wrap .icon {
+            width: 80px;
+            height: 80px;
+            background: #01d28e;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-wrap .icon span {
+            font-size: 40px;
+            color: #fff;
+        }
+        .login-wrap h3 {
+            font-weight: 700;
+            color: #000;
+        }
+        .login-wrap .form-control {
+            height: 52px;
+            border-radius: 5px;
+            font-size: 14px;
+            border: 1px solid #e6e6e6;
+        }
+        .login-wrap .form-control:focus {
+            border-color: #01d28e;
+            box-shadow: 0 0 0 0.2rem rgba(1, 210, 142, 0.25);
+        }
+        .login-wrap .label {
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #000;
+        }
+        .login-wrap .btn-primary {
+            background: #01d28e;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .login-wrap .btn-primary:hover {
+            background: #00b377;
+        }
+        .login-wrap a {
+            color: #01d28e;
+        }
+        .login-wrap a:hover {
+            color: #00b377;
+        }
+        .alert-danger {
+            font-size: 14px;
+        }
+        .text-danger {
+            font-size: 12px;
+        }
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+        .back-home a {
+            color: #fff;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .back-home a:hover {
+            color: #01d28e;
+        }
+        .back-home a span {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <section class="login-section">
+        <div class="back-home">
+            <a asp-controller="ClientInterface" asp-action="Home">
+                <span class="ion-ios-arrow-back"></span> Retour à l'accueil
+            </a>
+        </div>
+        @RenderBody()
+    </section>
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

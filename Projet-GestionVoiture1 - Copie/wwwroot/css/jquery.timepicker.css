@@ -1,0 +1,60 @@
+/* jQuery Timepicker */
+.ui-timepicker-container {
+  position: absolute;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ui-timepicker {
+  box-sizing: content-box;
+  display: block;
+  height: 205px;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0 1px;
+  text-align: center;
+}
+
+.ui-timepicker-viewport {
+  box-sizing: content-box;
+  display: block;
+  height: 205px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.ui-timepicker-standard {
+  background-color: #FFF;
+  border: 1px solid #ccc;
+  color: #222;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 1.1em;
+  margin: 6px 0 0 0;
+  padding: 5px 0 0 0;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  z-index: 10001;
+}
+
+.ui-timepicker-standard a {
+  border: 1px solid transparent;
+  color: #222;
+  display: block;
+  padding: .2em .4em;
+  text-decoration: none;
+}
+
+.ui-timepicker-standard .ui-state-hover {
+  background-color: #DADADA;
+  border: 1px solid #999;
+  font-weight: normal;
+  color: #212529;
+  border-radius: 4px;
+}
+
+.ui-timepicker-corners,
+.ui-timepicker-corners .ui-timepicker-viewport {
+  border-radius: 4px;
+}

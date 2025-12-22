@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Administration</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <!-- Profile Section -->
+        <div class="sidebar-profile">
+            <div class="profile-avatar">
+                <span>@(User.Identity?.Name?.Substring(0, 2).ToUpper() ?? "AD")</span>
+            </div>
+            <div class="profile-info">
+                <h4>@(User.Identity?.Name ?? "Admin")</h4>
+                <span class="role-badge">Administrateur</span>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="sidebar-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher..." id="sidebarSearch" />
+        </div>
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <span class="nav-section-title">Menu</span>
+            </div>
+
+            <a asp-controller="Dashboard" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a asp-controller="Voitures" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Voitures" ? "active" : "")">
+                <i class="fas fa-car"></i>
+                <span>Voitures</span>
+            </a>
+
+            <a asp-controller="Reservations" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Reservations" ? "active" : "")">
+                <i class="fas fa-calendar-check"></i>
+                <span>Réservations</span>
+            </a>
+
+            <a asp-controller="Clients" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Clients" ? "active" : "")">
+                <i class="fas fa-users"></i>
+                <span>Clients</span>
+            </a>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Autres</span>
+            </div>
+
+            <a asp-controller="Paiements" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Paiements" ? "active" : "")">
+                <i class="fas fa-credit-card"></i>
+                <span>Paiements</span>
+            </a>
+
+            <a asp-controller="Statistiques" asp-action="Index" class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Statistiques" ? "active" : "")">
+                <i class="fas fa-chart-line"></i>
+                <span>Statistiques</span>
+            </a>
+        </nav>
+
+        <!-- Footer -->
+        <div class="sidebar-footer">
+            <a asp-controller="Account" asp-action="Profile" class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
+                <i class="fas fa-user-cog"></i>
+                <span>Profil</span>
+            </a>
+
+            <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="nav-item logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Déconnexion</span>
+                </button>
+            </form>
+
+            <!-- Dark/Light Mode Toggle -->
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <span>Mode Sombre</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="btn-menu" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="topbar-title">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="btn-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-avatar-small">
+                    <span>@(User.Identity?.Name?.Substring(0, 2).ToUpper() ?? "AD")</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            @RenderBody()
+        </div>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const themeIcon = document.querySelector('.theme-toggle i');
+        const themeText = document.querySelector('.theme-toggle span');
+        
+        // Function to update theme UI
+        function updateThemeUI(isDark) {
+            if (isDark) {
+                body.classList.remove('light-mode');
+                themeToggle.checked = true;
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+                if (themeText) themeText.textContent = 'Mode Sombre';
+            } else {
+                body.classList.add('light-mode');
+                themeToggle.checked = false;
+                if (themeIcon) themeIcon.className = 'fas fa-sun';
+                if (themeText) themeText.textContent = 'Mode Clair';
+            }
+        }
+        
+        // Check saved preference (default is dark mode)
+        const savedTheme = localStorage.getItem('darkMode');
+        if (savedTheme === 'false') {
+            updateThemeUI(false);
+        } else {
+            updateThemeUI(true);
+            localStorage.setItem('darkMode', 'true');
+        }
+        
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                updateThemeUI(true);
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                updateThemeUI(false);
+                localStorage.setItem('darkMode', 'false');
+            }
+        });
+
+        // Sidebar Toggle for Mobile
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

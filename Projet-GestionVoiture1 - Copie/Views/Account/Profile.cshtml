@@ -1,0 +1,179 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Profil";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Bannière d'en-tête avec image du site -->
+    <div class="profile-header" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('/images/bg_1.jpg') center/cover no-repeat; height: 250px; position: relative; border-radius: 15px;">
+        <div class="profile-header-content text-white text-center py-5">
+            <h1><i class="fas fa-user-shield me-2"></i>Mon Profil Administrateur</h1>
+            <p class="mb-0">Gérez vos informations personnelles</p>
+        </div>
+    </div>
+
+    <!-- Messages de succès/erreur -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Cadre blanc arrondi contenant les infos -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-10">
+            <div class="card shadow-sm" style="border-radius: 20px; overflow: hidden; margin-top: -80px; z-index: 1;">
+                <div class="card-body p-4">
+
+                    <!-- En-tête du profil -->
+                    <div class="d-flex align-items-center mb-4">
+                        <!-- Photo de profil par défaut -->
+                        <div class="rounded-circle me-3" style="width: 80px; height: 80px; background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; box-shadow: 0 4px 15px rgba(247, 151, 30, 0.4);">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+
+                        <div>
+                            <h5 class="mb-0">@(ViewBag.Prenom ?? "") @(ViewBag.Nom ?? "")</h5>
+                            <small class="text-muted"><i class="fas fa-envelope me-1"></i>@ViewBag.Email</small><br>
+                            <span class="badge bg-primary"><i class="fas fa-shield-alt me-1"></i>Administrateur</span>
+                        </div>
+
+                        <!-- Menu rapide -->
+                        <div class="ms-auto">
+                            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-outline-primary btn-sm me-2">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a href="@Url.Action("Index", "Voitures")" class="btn btn-outline-secondary btn-sm me-2">
+                                <i class="fas fa-car"></i> Voitures
+                            </a>
+                            <a href="@Url.Action("Index", "Reservations")" class="btn btn-outline-dark btn-sm">
+                                <i class="fas fa-calendar-check"></i> Réservations
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Formulaire d'information -->
+                    <h6 class="mt-4 mb-3"><i class="fas fa-edit me-2"></i>Modifier mes informations</h6>
+
+                    <form asp-action="Profile" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-envelope me-1"></i>Adresse email</label>
+                                <input type="email" class="form-control" value="@ViewBag.Email" readonly 
+                                       style="background-color: #f8f9fa; cursor: not-allowed;" />
+                                <small class="text-muted">L'email ne peut pas être modifié</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-user me-1"></i>Nom</label>
+                                <input type="text" class="form-control" name="nom" value="@ViewBag.Nom" 
+                                       placeholder="Entrez votre nom" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-user me-1"></i>Prénom</label>
+                                <input type="text" class="form-control" name="prenom" value="@ViewBag.Prenom" 
+                                       placeholder="Entrez votre prénom" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-phone me-1"></i>Téléphone</label>
+                                <input type="tel" class="form-control" name="phoneNumber" value="@ViewBag.PhoneNumber" 
+                                       placeholder="+212 6 XX XX XX XX" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Enregistrer les modifications
+                            </button>
+                            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Retour au Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .profile-header-content h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .profile-header-content p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .btn-outline-primary, .btn-outline-secondary, .btn-outline-dark {
+        border-radius: 20px;
+        padding: 5px 15px;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-dark:hover {
+        transform: translateY(-2px);
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 0.95rem;
+        border: 1px solid #e0e0e0;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #f7971e;
+        box-shadow: 0 0 0 0.2rem rgba(247, 151, 30, 0.25);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(247, 151, 30, 0.4);
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+</style>

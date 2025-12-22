@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Projet_GestionVoiture1.Models.Reservation>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Gestion des Réservations";
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+    <p>Gérez les réservations de véhicules</p>
+</div>
+
+<div class="mb-4">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nouvelle réservation
+    </a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-card">
+        <div class="card-header">
+            <h3>Liste des réservations (@Model.Count())</h3>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Voiture</th>
+                    <th>Date début</th>
+                    <th>Date fin</th>
+                    <th>Statut</th>
+                    <th>Montant</th>
+                    <th>Créée le</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <i class="fas fa-user" style="color:#6b7280; margin-right:4px;"></i>
+                            <strong>@(item.Client?.Nom ?? "") @(item.Client?.Prenom ?? "")</strong>
+                        </td>
+                        <td>
+                            <i class="fas fa-car" style="color:#6b7280; margin-right:4px;"></i>
+                            @(item.Voiture?.Nom ?? "Inconnue")
+                        </td>
+                        <td>
+                            <i class="fas fa-calendar-alt" style="color:#059669; margin-right:4px;"></i>
+                            @item.DateDebut.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            <i class="fas fa-calendar-alt" style="color:#dc2626; margin-right:4px;"></i>
+                            @item.DateFin.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @if (item.Statut == "En attente")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-clock"></i> En attente
+                                </span>
+                            }
+                            else if (item.Statut == "Confirmée")
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle"></i> Confirmée
+                                </span>
+                            }
+                            else if (item.Statut == "Annulée")
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times-circle"></i> Annulée
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge" style="background:#f0f9ff; color:#0369a1;">@item.Statut</span>
+                            }
+                        </td>
+                        <td>
+                            <strong style="color:#059669;">@item.MontantTotal.ToString("F2")</strong>
+                            <small style="color:#6b7280;"> MAD</small>
+                        </td>
+                        <td>
+                            <small style="color:#6b7280;">@item.DateReservation.ToString("dd/MM/yyyy HH:mm")</small>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="Voir les détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="empty-state" style="text-align:center; padding:60px 20px; background:white; border-radius:12px; border:1px solid #e5e7eb;">
+        <div style="width:80px; height:80px; background:#f0f9ff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-bottom:20px;">
+            <i class="fas fa-calendar-check" style="font-size:32px; color:#0369a1;"></i>
+        </div>
+        <h3 style="margin-bottom:8px; color:#1f2937;">Aucune réservation disponible</h3>
+        <p style="color:#6b7280; margin-bottom:24px;">Commencez par créer votre première réservation</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nouvelle réservation
+        </a>
+    </div>
+}

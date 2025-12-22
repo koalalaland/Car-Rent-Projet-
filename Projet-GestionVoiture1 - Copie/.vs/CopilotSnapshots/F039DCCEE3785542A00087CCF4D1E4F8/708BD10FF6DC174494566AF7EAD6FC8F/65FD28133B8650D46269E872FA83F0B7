@@ -1,0 +1,32 @@
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using Projet_GestionVoiture1.Models;
+
+namespace Projet_GestionVoiture1.Controllers
+{
+    public class ClientInterfaceController : Controller
+    {
+        private readonly ILogger<ClientInterfaceController> _logger;
+
+        public ClientInterfaceController(ILogger<ClientInterfaceController> logger)
+        {
+            _logger = logger;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    }
+}

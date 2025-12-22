@@ -1,0 +1,146 @@
+﻿@* @model Projet_GestionVoiture1.Models.Reservation
+@{
+    Layout = "_AdminLayout";
+}
+@{
+    ViewData["Title"] = "Modifier la réservation";
+}
+
+<h2>Modifier la réservation</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="DateReservation" />
+
+    <div class="form-group mb-3">
+        <label asp-for="ClientId" class="form-label">Client</label>
+        <select asp-for="ClientId" class="form-select" asp-items="@(new SelectList(ViewBag.Clients, "Id", "NomComplet"))">
+            <option value="">-- Sélectionner un client --</option>
+        </select>
+        <span asp-validation-for="ClientId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="VoitureId" class="form-label">Voiture</label>
+        <select asp-for="VoitureId" class="form-select" asp-items="@(new SelectList(ViewBag.Voitures, "Id", "Nom"))">
+            <option value="">-- Sélectionner une voiture --</option>
+        </select>
+        <span asp-validation-for="VoitureId" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="DateDebut" class="form-label">Date de début</label>
+                <input asp-for="DateDebut" class="form-control" type="date" />
+                <span asp-validation-for="DateDebut" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="DateFin" class="form-label">Date de fin</label>
+                <input asp-for="DateFin" class="form-control" type="date" />
+                <span asp-validation-for="DateFin" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Statut" class="form-label">Statut</label>
+        <select asp-for="Statut" class="form-select">
+            <option value="En attente">En attente</option>
+            <option value="Confirmée">Confirmée</option>
+            <option value="Annulée">Annulée</option>
+        </select>
+        <span asp-validation-for="Statut" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="MontantTotal" class="form-label">Montant total</label>
+        <input asp-for="MontantTotal" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="MontantTotal" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save"></i> Enregistrer
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Annuler
+        </a>
+    </div>
+</form> *@
+
+
+@model Projet_GestionVoiture1.Models.Reservation
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Modifier la réservation";
+}
+
+<h2>Modifier la réservation</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="DateReservation" />
+
+    <div class="form-group mb-3">
+        <label asp-for="ClientId" class="form-label">Client</label>
+        <select asp-for="ClientId" class="form-select" asp-items="@(new SelectList(ViewBag.Clients, "Id", "NomComplet"))">
+            <option value="">-- Sélectionner un client --</option>
+        </select>
+        <span asp-validation-for="ClientId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="VoitureId" class="form-label">Voiture</label>
+        <select asp-for="VoitureId" class="form-select" asp-items="@(new SelectList(ViewBag.Voitures, "Id", "Nom"))">
+            <option value="">-- Sélectionner une voiture --</option>
+        </select>
+        <span asp-validation-for="VoitureId" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="DateDebut" class="form-label">Date de début</label>
+                <input asp-for="DateDebut" class="form-control" type="date" />
+                <span asp-validation-for="DateDebut" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="DateFin" class="form-label">Date de fin</label>
+                <input asp-for="DateFin" class="form-control" type="date" />
+                <span asp-validation-for="DateFin" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Statut" class="form-label">Statut</label>
+        <select asp-for="Statut" class="form-select">
+            <option value="En attente">En attente</option>
+            <option value="Confirmée">Confirmée</option>
+            <option value="Annulée">Annulée</option>
+        </select>
+        <span asp-validation-for="Statut" class="text-danger"></span>
+    </div>
+
+    <!-- 🔹 Montant total : LECTURE SEULE – pas d'input éditable -->
+    <div class="form-group mb-3">
+        <label class="form-label">Montant total</label>
+        <div class="form-control-plaintext" style="font-size: 1.1rem; font-weight: bold;">
+            @Model.MontantTotal.ToString("F2") MAD
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save"></i> Enregistrer
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Annuler
+        </a>
+    </div>
+</form>

@@ -1,0 +1,52 @@
+﻿@model Projet_GestionVoiture1.Models.Voiture
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Supprimer une voiture";
+}
+@{
+    ViewData["Title"] = "Supprimer la voiture";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Êtes-vous sûr de vouloir supprimer cette voiture ?</h3>
+
+<div>
+    <h4>Détails de la voiture</h4>
+    <hr />
+
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div style="margin-bottom: 15px;">
+            <img src="@Model.ImageUrl"
+                 alt="Voiture @Model.Marque @Model.Modele"
+                 style="max-width: 200px; max-height: 200px; object-fit: contain; border: 1px solid #ddd; border-radius: 4px;" />
+        </div>
+    }
+
+    <dl class="row">
+        <dt class="col-sm-3">Marque</dt>
+        <dd class="col-sm-9">@Model.Marque</dd>
+
+        <dt class="col-sm-3">Modèle</dt>
+        <dd class="col-sm-9">@Model.Modele</dd>
+
+        <dt class="col-sm-3">Catégorie</dt>
+        <dd class="col-sm-9">@Model.Categorie</dd>
+
+        <dt class="col-sm-3">Ville</dt>
+        <dd class="col-sm-9">@Model.Ville</dd>
+
+        <dt class="col-sm-3">Prix/Jour</dt>
+        <dd class="col-sm-9">@Model.PrixParJour MAD</dd>
+
+        <dt class="col-sm-3">État</dt>
+        <dd class="col-sm-9">@Model.Etat</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Supprimer" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Retour à la liste</a>
+    </form>
+</div>

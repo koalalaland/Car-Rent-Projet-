@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Autoroad - Car Rental</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/animate.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/magnific-popup.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/aos.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/fonts/ionicons/css/ionicons.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/jquery.timepicker.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/icomoon.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* Fix for ftco-animate visibility */
+        .ftco-animate {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        /* Ensure hero content is visible */
+        .hero-wrap .text h1,
+        .hero-wrap .text p,
+        .hero-wrap .text a {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        /* Ensure request form is visible */
+        .request-form {
+            opacity: 1 !important;
+            visibility: visible !important;
+            background: #fff !important;
+        }
+
+        /* Ensure search wrap is visible */
+        .search-wrap-1 {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" asp-action="Home" asp-controller="ClientInterface">Auto<span>road</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a asp-action="Home" asp-controller="ClientInterface" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Home", "ClientInterface")#about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Home", "ClientInterface")#guide" class="nav-link">Guide</a></li>
+                    <li class="nav-item"><a asp-action="Cars" asp-controller="ClientInterface" class="nav-link">Our Car</a></li>
+                    <li class="nav-item"><a asp-action="Contact" asp-controller="ClientInterface" class="nav-link">Contact</a></li>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="icon-user"></span> @User.Identity.Name
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">
+                                        <span class="icon-dashboard"></span> Dashboard Admin
+                                    </a>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                        <span class="icon-user"></span> Mon Profil
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item" asp-controller="ClientInterface" asp-action="Profile">
+                                        <span class="icon-user"></span> Mon Profil
+                                    </a>
+                                    <a class="dropdown-item" asp-controller="ClientInterface" asp-action="MesReservations">
+                                        <span class="icon-calendar"></span> Mes Reservations
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                }
+                                <div class="dropdown-divider"></div>
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="dropdown-item">
+                                        <span class="icon-sign-out"></span> Deconnexion
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a asp-controller="Account" asp-action="Login" class="nav-link">Connexion</a></li>
+                        <li class="nav-item"><a asp-controller="Account" asp-action="Register" class="nav-link" style="background: #01d28e; border-radius: 5px; margin-left: 10px; padding: 8px 20px !important;">S'inscrire</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    @RenderBody()
+
+    <!-- Footer -->
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">About Autoroad</h2>
+                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                            <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                            <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                            <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ftco-footer-widget mb-4 ml-md-5">
+                        <h2 class="ftco-heading-2">Information</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="@Url.Action("About", "ClientInterface")" class="py-2 d-block">About</a></li>
+                            <li><a href="#" class="py-2 d-block">Services</a></li>
+                            <li><a href="#" class="py-2 d-block">Term and Conditions</a></li>
+                            <li><a href="#" class="py-2 d-block">Best Price Guarantee</a></li>
+                            <li><a href="#" class="py-2 d-block">Privacy &amp; Cookies Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Customer Support</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="py-2 d-block">FAQ</a></li>
+                            <li><a href="#" class="py-2 d-block">Payment Option</a></li>
+                            <li><a href="#" class="py-2 d-block">Booking Tips</a></li>
+                            <li><a href="#" class="py-2 d-block">How it works</a></li>
+                            <li><a href="@Url.Action("Contact", "ClientInterface")" class="py-2 d-block">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Have a Questions?</h2>
+                        <div class="block-23 mb-3">
+                            <ul>
+                                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+                                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+                                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>Copyright &copy; @DateTime.Now.Year All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loader -->
+    <div id="ftco-loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+        </svg>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/js/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/js/jquery-migrate-3.0.1.min.js" asp-append-version="true"></script>
+    <script src="~/js/popper.min.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.easing.1.3.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.waypoints.min.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.stellar.min.js" asp-append-version="true"></script>
+    <script src="~/js/owl.carousel.min.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.magnific-popup.min.js" asp-append-version="true"></script>
+    <script src="~/js/aos.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.animateNumber.min.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap-datepicker.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.timepicker.min.js" asp-append-version="true"></script>
+    <script src="~/js/scrollax.min.js" asp-append-version="true"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
+
+    <script>
+        // Fallback: Force ftco-animate elements to be visible after page load
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('.ftco-animate').each(function() {
+                    if (!$(this).hasClass('ftco-animated')) {
+                        $(this).addClass('fadeInUp ftco-animated');
+                    }
+                });
+            }, 500);
+            
+            // Smooth scroll for anchor links
+            if (window.location.hash) {
+                var target = $(window.location.hash);
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top - 100
+                    }, 800);
+                }
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

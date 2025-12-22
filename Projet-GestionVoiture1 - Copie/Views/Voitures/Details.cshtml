@@ -1,0 +1,150 @@
+﻿@* @model Projet_GestionVoiture1.Models.Voiture
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Détails de la voiture";
+}
+@{
+    ViewData["Title"] = "Détails de la voiture";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <dt class="col-sm-3">Photo</dt>
+            <dd class="col-sm-9">
+                <img src="@Model.ImageUrl"
+                     alt="Voiture @Model.Marque @Model.Modele"
+                     style="max-width: 300px; max-height: 300px; object-fit: contain; border: 1px solid #ddd; border-radius: 6px;" />
+            </dd>
+        }
+
+        <dt class="col-sm-3">Nom affiché</dt>
+        <dd class="col-sm-9">@Model.Nom</dd>
+
+        <dt class="col-sm-3">Marque</dt>
+        <dd class="col-sm-9">@Model.Marque</dd>
+
+        <dt class="col-sm-3">Modèle</dt>
+        <dd class="col-sm-9">@Model.Modele</dd>
+
+        <dt class="col-sm-3">Catégorie</dt>
+        <dd class="col-sm-9">@Model.Categorie</dd>
+
+        <dt class="col-sm-3">Ville</dt>
+        <dd class="col-sm-9">@Model.Ville</dd>
+
+        <dt class="col-sm-3">Prix par jour</dt>
+        <dd class="col-sm-9">@Model.PrixParJour MAD</dd>
+
+        <dt class="col-sm-3">État</dt>
+        <dd class="col-sm-9">@Model.Etat</dd>
+
+        @if (!string.IsNullOrEmpty(Model.AdministrateurId))
+        {
+            <dt class="col-sm-3">Ajoutée par</dt>
+            <dd class="col-sm-9">@Model.AdministrateurId</dd>
+        }
+
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Modifier</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour à la liste</a>
+</div> *@
+
+
+@model Projet_GestionVoiture1.Models.Voiture
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Détails de la voiture";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<dl class="row">
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <dt class="col-sm-3">Photo</dt>
+        <dd class="col-sm-9">
+            <img src="@Model.ImageUrl" alt="Voiture"
+                 style="max-width: 300px; max-height: 300px; object-fit: contain; border: 1px solid #ddd; border-radius: 6px;" />
+        </dd>
+    }
+
+    <dt class="col-sm-3">Nom affiché</dt>
+    <dd class="col-sm-9">@Model.Nom</dd>
+
+    <dt class="col-sm-3">Marque</dt>
+    <dd class="col-sm-9">@Model.Marque</dd>
+
+    <dt class="col-sm-3">Modèle</dt>
+    <dd class="col-sm-9">@Model.Modele</dd>
+
+    <dt class="col-sm-3">Catégorie</dt>
+    <dd class="col-sm-9">@Model.Categorie</dd>
+
+    <dt class="col-sm-3">Ville</dt>
+    <dd class="col-sm-9">@Model.Ville</dd>
+
+    <dt class="col-sm-3">Prix par jour</dt>
+    <dd class="col-sm-9">@Model.PrixParJour MAD</dd>
+
+    <dt class="col-sm-3">État</dt>
+    <dd class="col-sm-9">@Model.Etat</dd>
+
+    @if (!string.IsNullOrEmpty(Model.Couleur))
+    {
+        <dt class="col-sm-3">Couleur</dt>
+        <dd class="col-sm-9">@Model.Couleur</dd>
+    }
+
+    @if (Model.AnneeMiseEnCirculation.HasValue)
+    {
+        <dt class="col-sm-3">Année</dt>
+        <dd class="col-sm-9">@Model.AnneeMiseEnCirculation.Value</dd>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.PlaqueImmatriculation))
+    {
+        <dt class="col-sm-3">Plaque</dt>
+        <dd class="col-sm-9">@Model.PlaqueImmatriculation</dd>
+    }
+
+    <dt class="col-sm-3">Transmission</dt>
+    <dd class="col-sm-9">@Model.Transmission</dd>
+
+    <dt class="col-sm-3">Kilométrage</dt>
+    <dd class="col-sm-9">
+        @(Model.KilometrageIllimite ? "Illimité" : $"{Model.KilometrageLimiteParJour} km/jour")
+    </dd>
+
+    <dt class="col-sm-3">Portes / Sièges</dt>
+    <dd class="col-sm-9">@Model.NombrePortes portes / @Model.NombreSieges sièges</dd>
+
+    <dt class="col-sm-3">Climatisation</dt>
+    <dd class="col-sm-9">@(Model.Climatisation ? "Oui" : "Non")</dd>
+
+    @if (!string.IsNullOrEmpty(Model.Carburant))
+    {
+        <dt class="col-sm-3">Carburant</dt>
+        <dd class="col-sm-9">@Model.Carburant</dd>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.AdministrateurId))
+    {
+        <dt class="col-sm-3">Ajoutée par</dt>
+        <dd class="col-sm-9">@Model.AdministrateurId</dd>
+    }
+</dl>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Modifier</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour à la liste</a>
+</div>

@@ -1,0 +1,315 @@
+@{
+    ViewData["Title"] = "Contact - AutoRoad Location de Voitures";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Hero Section -->
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('@Url.Content("~/images/bg_2.jpg")');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="@Url.Action("Home", "ClientInterface")">Accueil <i class="ion-ios-arrow-forward"></i></a></span> <span>Contact</span></p>
+                <h1 class="mb-3 bread">Contactez-nous</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="ftco-section contact-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <span class="subheading">Contact</span>
+                <h2 class="mb-4">Nous sommes là pour vous aider</h2>
+                <p>N'hésitez pas à nous contacter pour toute question concernant nos services de location de voitures.</p>
+            </div>
+        </div>
+        <div class="row d-flex contact-info mb-5 justify-content-center">
+            <div class="col-md-6 col-lg-4 d-flex ftco-animate">
+                <div class="align-self-stretch box p-4 text-center">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="icon-phone2"></span>
+                    </div>
+                    <h3 class="mb-4">Téléphone</h3>
+                    <p><a href="tel:+212600000000">+212 6 00 00 00 00</a></p>
+                    <p><a href="tel:+212522000000">+212 5 22 00 00 00</a></p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 d-flex ftco-animate">
+                <div class="align-self-stretch box p-4 text-center">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="icon-paper-plane"></span>
+                    </div>
+                    <h3 class="mb-4">Email</h3>
+                    <p><a href="mailto:contact@autoroad.ma">contact@autoroad.ma</a></p>
+                    <p><a href="mailto:reservation@autoroad.ma">reservation@autoroad.ma</a></p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 d-flex ftco-animate">
+                <div class="align-self-stretch box p-4 text-center">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="icon-map-marker"></span>
+                    </div>
+                    <h3 class="mb-4">Adresse</h3>
+                    <p>123 Boulevard Mohammed V</p>
+                    <p>Casablanca, Maroc</p>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="wrapper ftco-animate">
+                    <div class="row no-gutters">
+                        <div class="col-md-12">
+                            <div class="contact-wrap w-100 p-md-5 p-4">
+                                <h3 class="mb-4 text-center">Horaires d'ouverture</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong>Lundi - Vendredi</strong></td>
+                                                    <td>08:00 - 20:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Samedi</strong></td>
+                                                    <td>09:00 - 18:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Dimanche</strong></td>
+                                                    <td>10:00 - 16:00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <h4 class="mb-3">Suivez-nous</h4>
+                                            <ul class="ftco-footer-social list-unstyled d-flex justify-content-center mt-3">
+                                                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                                                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                                                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .contact-section {
+        padding: 4em 0;
+    }
+    
+    .contact-info .box {
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    
+    .contact-info .box .icon {
+        width: 80px;
+        height: 80px;
+        background: #000 !important;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .contact-info .box .icon span {
+        font-size: 30px;
+        color: #fff !important;
+        display: inline-block;
+        line-height: 1;
+    }
+    
+    .contact-info .box .icon span::before {
+        color: #fff !important;
+        font-size: 30px;
+    }
+    
+    .contact-info .box h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #000;
+    }
+    
+    .contact-info .box p {
+        color: #666;
+        margin-bottom: 5px;
+    }
+    
+    .contact-info .box p a {
+        color: #666;
+        transition: 0.3s;
+    }
+    
+    .contact-info .box p a:hover {
+        color: #01d28e;
+    }
+    
+    .contact-wrap {
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .contact-wrap h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #000;
+    }
+    
+    .contact-wrap h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #000;
+    }
+    
+    /* Table responsive */
+    .contact-wrap .table {
+        width: 100% !important;
+        min-width: auto !important;
+        max-width: 100%;
+        margin-bottom: 0;
+        table-layout: fixed;
+    }
+    
+    .contact-wrap .table td {
+        padding: 12px 10px;
+        border-top: 1px solid #eee;
+        word-wrap: break-word;
+        vertical-align: middle;
+    }
+    
+    .contact-wrap .table tbody tr td {
+        padding: 12px 10px !important;
+        border-bottom: 1px solid #eee !important;
+    }
+    
+    /* Social icons - cercles noirs avec icônes blanches */
+    .contact-section .ftco-footer-social {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .contact-section .ftco-footer-social li {
+        margin: 0 8px;
+        list-style: none;
+    }
+    
+    .contact-section .ftco-footer-social li a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background: #000 !important;
+        border-radius: 50%;
+        color: #fff !important;
+        font-size: 20px;
+        transition: 0.3s;
+        position: relative;
+    }
+    
+    .contact-section .ftco-footer-social li a span {
+        color: #fff !important;
+        font-size: 20px;
+        line-height: 1;
+    }
+    
+    .contact-section .ftco-footer-social li a span::before {
+        color: #fff !important;
+        font-size: 20px;
+    }
+    
+    .contact-section .ftco-footer-social li a:hover {
+        background: #333 !important;
+        transform: translateY(-3px);
+    }
+    
+    /* Responsive */
+    @@media (max-width: 991px) {
+        .contact-wrap .row .col-md-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .contact-wrap .table {
+            width: 100% !important;
+        }
+    }
+    
+    @@media (max-width: 767px) {
+        .contact-section {
+            padding: 3em 0;
+        }
+        
+        .contact-wrap {
+            padding: 20px !important;
+        }
+        
+        .contact-wrap .table td {
+            padding: 10px 8px;
+            font-size: 14px;
+        }
+        
+        .contact-section .ftco-footer-social li a {
+            width: 45px;
+            height: 45px;
+        }
+        
+        .contact-section .ftco-footer-social li a span::before {
+            font-size: 18px;
+        }
+        
+        .contact-info .box {
+            margin-bottom: 20px;
+        }
+        
+        .contact-info .box .icon {
+            width: 70px;
+            height: 70px;
+        }
+        
+        .contact-info .box .icon span::before {
+            font-size: 25px;
+        }
+    }
+    
+    @@media (max-width: 575px) {
+        .contact-wrap .table td {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        .contact-wrap .table td strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .contact-section .ftco-footer-social {
+            flex-wrap: wrap;
+        }
+        
+        .contact-section .ftco-footer-social li {
+            margin: 5px;
+        }
+    }
+</style>

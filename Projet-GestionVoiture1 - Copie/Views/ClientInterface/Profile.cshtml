@@ -1,0 +1,168 @@
+@model Projet_GestionVoiture1.Models.Client
+@{
+    ViewData["Title"] = "Mon Profil";
+    var reservations = ViewBag.Reservations as List<Projet_GestionVoiture1.Models.Reservation> ?? new List<Projet_GestionVoiture1.Models.Reservation>();
+}
+
+<!-- Hero Section -->
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="/">Accueil <i class="ion-ios-arrow-forward"></i></a></span> <span>Mon Profil <i class="ion-ios-arrow-forward"></i></span></p>
+                <h1 class="mb-3 bread">Mon Profil</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <!-- Informations du profil -->
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                    <div class="card-body text-center p-4">
+                        <!-- Avatar -->
+                        <div class="mb-4">
+                            <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #01d28e, #007bff); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 3rem; color: white; font-weight: bold;">
+                                    @(Model.Prenom?.FirstOrDefault().ToString().ToUpper() ?? "C")@(Model.Nom?.FirstOrDefault().ToString().ToUpper() ?? "")
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-1">@Model.Prenom @Model.Nom</h4>
+                        <p class="text-muted mb-3">@Model.Email</p>
+                        
+                        <span class="badge bg-success px-3 py-2" style="font-size: 0.9rem;">
+                            <i class="icon-user mr-1"></i> Client
+                        </span>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-start">
+                            <p class="mb-2">
+                                <strong><i class="icon-envelope mr-2"></i> Email:</strong><br>
+                                <span class="text-muted">@Model.Email</span>
+                            </p>
+                            @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                            {
+                                <p class="mb-2">
+                                    <strong><i class="icon-phone mr-2"></i> Téléphone:</strong><br>
+                                    <span class="text-muted">@Model.PhoneNumber</span>
+                                </p>
+                            }
+                            <p class="mb-0">
+                                <strong><i class="icon-calendar mr-2"></i> Membre depuis:</strong><br>
+                                <span class="text-muted">@(Model.LockoutEnd?.DateTime.ToString("dd MMM yyyy") ?? "Non disponible")</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="card shadow-sm border-0 mt-4" style="border-radius: 15px;">
+                    <div class="card-body p-4">
+                        <h6 class="mb-3"><i class="icon-settings mr-2"></i> Actions rapides</h6>
+                        <a href="@Url.Action("MesReservations", "ClientInterface")" class="btn btn-outline-primary btn-block mb-2">
+                            <i class="icon-calendar mr-2"></i> Voir toutes mes réservations
+                        </a>
+                        <a href="@Url.Action("Cars", "ClientInterface")" class="btn btn-success btn-block">
+                            <i class="icon-car mr-2"></i> Réserver une voiture
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dernières réservations -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-white py-3" style="border-radius: 15px 15px 0 0;">
+                        <h5 class="mb-0">
+                            <i class="icon-calendar mr-2"></i> Mes dernières réservations
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        @if (reservations.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Voiture</th>
+                                            <th>Date début</th>
+                                            <th>Date fin</th>
+                                            <th>Montant</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var reservation in reservations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        @if (reservation.Voiture != null)
+                                                        {
+                                                            <img src="@(reservation.Voiture.ImageUrl ?? "/images/voitures/default.jpg")" 
+                                                                 alt="@reservation.Voiture.Marque" 
+                                                                 style="width: 60px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
+                                                            <div>
+                                                                <strong>@reservation.Voiture.Marque @reservation.Voiture.Modele</strong>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">Non disponible</span>
+                                                        }
+                                                    </div>
+                                                </td>
+                                                <td>@reservation.DateDebut.ToString("dd/MM/yyyy")</td>
+                                                <td>@reservation.DateFin.ToString("dd/MM/yyyy")</td>
+                                                <td><strong>@reservation.MontantTotal.ToString("N2") DH</strong></td>
+                                                <td>
+                                                    @{
+                                                        var badgeClass = reservation.Statut switch
+                                                        {
+                                                            "Confirmée" => "bg-success",
+                                                            "En attente" => "bg-warning text-dark",
+                                                            "Annulée" => "bg-danger",
+                                                            _ => "bg-secondary"
+                                                        };
+                                                    }
+                                                    <span class="badge @badgeClass">@reservation.Statut</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <a href="@Url.Action("MesReservations", "ClientInterface")" class="btn btn-outline-primary">
+                                    Voir toutes mes réservations <i class="icon-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="icon-calendar" style="font-size: 4rem; color: #ccc;"></i>
+                                <h5 class="mt-3 text-muted">Aucune réservation</h5>
+                                <p class="text-muted">Vous n'avez pas encore effectué de réservation.</p>
+                                <a href="@Url.Action("Cars", "ClientInterface")" class="btn btn-success mt-2">
+                                    <i class="icon-car mr-2"></i> Réserver maintenant
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <!-- Statistiques -->
+
+            </div>
+        </div>
+    </div>
+</section>

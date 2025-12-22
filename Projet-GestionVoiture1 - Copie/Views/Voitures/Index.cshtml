@@ -1,0 +1,401 @@
+﻿@* @model IEnumerable<Projet_GestionVoiture1.Models.Voiture>
+
+@{
+    ViewData["Title"] = "Liste des Voitures";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Ajouter une nouvelle voiture</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Nom</th>
+            <th>Marque</th>
+            <th>Modèle</th>
+            <th>Catégorie</th>
+            <th>Ville</th>
+            <th>Prix/Jour</th>
+            <th>État</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="Voiture @item.Marque @item.Modele"
+                             style="width:60px; height:auto; border-radius:4px;" />
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>@item.Nom</td>
+                <td>@item.Marque</td>
+                <td>@item.Modele</td>
+                <td>@item.Categorie</td>
+                <td>@item.Ville</td>
+                <td>@item.PrixParJour MAD</td>
+                <td>@item.Etat</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Détails</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Modifier</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+
+
+
+
+
+
+
+
+@* 
+@model IEnumerable<Projet_GestionVoiture1.Models.Voiture>
+
+@{
+    ViewData["Title"] = "Liste des Voitures";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Ajouter une nouvelle voiture</a>
+</p>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Nom</th>
+                <th>Marque</th>
+                <th>Modèle</th>
+                <th>Catégorie</th>
+                <th>Ville</th>
+                <th>Prix/Jour</th>
+                <th>État</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="Voiture @item.Marque @item.Modele"
+                                 style="width:60px; height:auto; border-radius:4px;" />
+                        }
+                        else
+                        {
+                            <span style="color: #999;">Aucune image</span>
+                        }
+                    </td>
+                    <td>@(string.IsNullOrEmpty(item.Nom) ? $"{item.Marque} {item.Modele}" : item.Nom)</td>
+                    <td>@item.Marque</td>
+                    <td>@item.Modele</td>
+                    <td>@item.Categorie</td>
+                    <td>@item.Ville</td>
+                    <td><strong>@item.PrixParJour.ToString("0.00")</strong> MAD</td>
+                    <td>
+                        @if (item.Etat == "Disponible")
+                        {
+                            <span class="badge bg-success">@item.Etat</span>
+                        }
+                        else if (item.Etat == "Réservée")
+                        {
+                            <span class="badge bg-warning text-dark">@item.Etat</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@item.Etat</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Détails</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Modifier</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        <strong>Aucune voiture disponible.</strong> Cliquez sur "Ajouter une nouvelle voiture" pour commencer.
+    </div>
+} *@
+
+
+
+
+
+@* 
+
+@model IEnumerable<Projet_GestionVoiture1.Models.Voiture>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Gestion des Voitures";
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+    <p>Gérez votre flotte de véhicules</p>
+</div>
+
+<div class="mb-4">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Ajouter une nouvelle voiture
+    </a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-card">
+        <div class="card-header">
+            <h3>Liste des voitures (@Model.Count())</h3>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Nom</th>
+                    <th>Marque</th>
+                    <th>Modèle</th>
+                    <th>Catégorie</th>
+                    <th>Ville</th>
+                    <th>Prix/Jour</th>
+                    <th>État</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="Voiture @item.Marque @item.Modele"
+                                     style="width:80px; height:60px; object-fit:cover; border-radius:8px; border: 1px solid #e5e7eb;" />
+                            }
+                            else
+                            {
+                                <div style="width:80px; height:60px; background:#f3f4f6; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#9ca3af;">
+                                    <i class="fas fa-car" style="font-size:24px;"></i>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <strong>@(string.IsNullOrEmpty(item.Nom) ? $"{item.Marque} {item.Modele}" : item.Nom)</strong>
+                        </td>
+                        <td>@item.Marque</td>
+                        <td>@item.Modele</td>
+                        <td>
+                            <span class="badge" style="background:#f0f9ff; color:#0369a1;">@item.Categorie</span>
+                        </td>
+                        <td>
+                            <i class="fas fa-map-marker-alt" style="color:#6b7280; margin-right:4px;"></i>
+                            @item.Ville
+                        </td>
+                        <td>
+                            <strong style="color:#059669;">@item.PrixParJour.ToString("0.00")</strong>
+                            <small style="color:#6b7280;"> MAD</small>
+                        </td>
+                        <td>
+                            @if (item.Etat == "Disponible")
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle"></i> @item.Etat
+                                </span>
+                            }
+                            else if (item.Etat == "Réservée")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-clock"></i> @item.Etat
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-wrench"></i> @item.Etat
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="Voir les détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="empty-state" style="text-align:center; padding:60px 20px; background:white; border-radius:12px; border:1px solid #e5e7eb;">
+        <div style="width:80px; height:80px; background:#f0f9ff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-bottom:20px;">
+            <i class="fas fa-car" style="font-size:32px; color:#0369a1;"></i>
+        </div>
+        <h3 style="margin-bottom:8px; color:#1f2937;">Aucune voiture disponible</h3>
+        <p style="color:#6b7280; margin-bottom:24px;">Commencez par ajouter votre première voiture à la flotte</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter une voiture
+        </a>
+    </div>
+} *@
+
+
+@model IEnumerable<Projet_GestionVoiture1.Models.Voiture>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Gestion des Voitures";
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+    <p>Gérez votre flotte de véhicules</p>
+</div>
+
+<div class="mb-4">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Ajouter une nouvelle voiture
+    </a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-card">
+        <div class="card-header">
+            <h3>Liste des voitures (@Model.Count())</h3>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Nom</th>
+                    <th>Marque</th>
+                    <th>Modèle</th>
+                    <th>Catégorie</th>
+                    <th>Ville</th>
+                    <th>Prix/Jour</th>
+                    <th>État</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="Voiture @item.Marque @item.Modele"
+                                     style="width:80px; height:60px; object-fit:cover; border-radius:8px; border: 1px solid #e5e7eb;" />
+                            }
+                            else
+                            {
+                                <div style="width:80px; height:60px; background:#f3f4f6; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#9ca3af;">
+                                    <i class="fas fa-car" style="font-size:24px;"></i>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <strong>@(string.IsNullOrEmpty(item.Nom) ? $"{item.Marque} {item.Modele}" : item.Nom)</strong>
+                        </td>
+                        <td>@item.Marque</td>
+                        <td>@item.Modele</td>
+                        <td>
+                            <span class="badge" style="background:#f0f9ff; color:#0369a1;">@item.Categorie</span>
+                        </td>
+                        <td>
+                            <i class="fas fa-map-marker-alt" style="color:#6b7280; margin-right:4px;"></i>
+                            @item.Ville
+                        </td>
+                        <td>
+                            <strong style="color:#059669;">@item.PrixParJour.ToString("0.00")</strong>
+                            <small style="color:#6b7280;"> MAD</small>
+                        </td>
+                        <td>
+                            @if (item.Etat == "Disponible")
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle"></i> @item.Etat
+                                </span>
+                            }
+                            else if (item.Etat == "Réservée")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-clock"></i> @item.Etat
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-wrench"></i> @item.Etat
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="Voir les détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="empty-state" style="text-align:center; padding:60px 20px; background:white; border-radius:12px; border:1px solid #e5e7eb;">
+        <div style="width:80px; height:80px; background:#f0f9ff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-bottom:20px;">
+            <i class="fas fa-car" style="font-size:32px; color:#0369a1;"></i>
+        </div>
+        <h3 style="margin-bottom:8px; color:#1f2937;">Aucune voiture disponible</h3>
+        <p style="color:#6b7280; margin-bottom:24px;">Commencez par ajouter votre première voiture à la flotte</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter une voiture
+        </a>
+    </div>
+}

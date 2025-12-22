@@ -1,0 +1,239 @@
+﻿@* 
+@model Projet_GestionVoiture1.Models.Voiture
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Ajouter une voiture";
+}
+@{
+    ViewData["Title"] = "Ajouter une voiture";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div class="mb-3">
+        <label asp-for="Nom" class="form-label">Nom de la voiture (optionnel)</label>
+        <input asp-for="Nom" class="form-control" placeholder="Ex: Toyota Corolla 2023" />
+        <span asp-validation-for="Nom"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Marque" class="form-label">Marque *</label>
+        <input asp-for="Marque" class="form-control" />
+        <span asp-validation-for="Marque"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Modele" class="form-label">Modèle *</label>
+        <input asp-for="Modele" class="form-control" />
+        <span asp-validation-for="Modele"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Categorie" class="form-label">Catégorie *</label>
+        <input asp-for="Categorie" class="form-control" />
+        <span asp-validation-for="Categorie"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Ville" class="form-label">Ville *</label>
+        <input asp-for="Ville" class="form-control" />
+        <span asp-validation-for="Ville"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PrixParJour" class="form-label">Prix par jour (MAD) *</label>
+        <input asp-for="PrixParJour" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="PrixParJour"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Etat" class="form-label">État *</label>
+        <select asp-for="Etat" class="form-control">
+            <option value="Disponible">Disponible</option>
+            <option value="Réservée">Réservée</option>
+            <option value="En maintenance">En maintenance</option>
+        </select>
+        <span asp-validation-for="Etat"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Image de la voiture</label>
+        <input type="file" name="imageFile" accept="image/*" class="form-control" />
+        <small class="text-muted">Formats acceptés: JPG, PNG, GIF</small>
+    </div>
+
+    <br />
+    <div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@
+
+
+
+@model Projet_GestionVoiture1.Models.Voiture
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Ajouter une voiture";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- 🔹 Champs OBLIGATOIRES -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label asp-for="Nom" class="form-label">Nom affiché *</label>
+                <input asp-for="Nom" class="form-control" placeholder="Ex: Clio Économique" />
+                <span asp-validation-for="Nom" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Marque" class="form-label">Marque *</label>
+                <input asp-for="Marque" class="form-control" />
+                <span asp-validation-for="Marque" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Modele" class="form-label">Modèle *</label>
+                <input asp-for="Modele" class="form-control" />
+                <span asp-validation-for="Modele" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Categorie" class="form-label">Catégorie *</label>
+                <input asp-for="Categorie" class="form-control" />
+                <span asp-validation-for="Categorie" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Ville" class="form-label">Ville *</label>
+                <input asp-for="Ville" class="form-control" />
+                <span asp-validation-for="Ville" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PrixParJour" class="form-label">Prix par jour (MAD) *</label>
+                <input asp-for="PrixParJour" type="number" step="0.01" min="1" class="form-control" />
+                <span asp-validation-for="PrixParJour" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Etat" class="form-label">État *</label>
+                <select asp-for="Etat" class="form-control">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Réservée">Réservée</option>
+                    <option value="En location">En location</option>
+                    <option value="En maintenance">En maintenance</option>
+                </select>
+                <span asp-validation-for="Etat" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <!-- 🔹 Champs OPTIONNELS -->
+            <div class="mb-3">
+                <label asp-for="Couleur" class="form-label">Couleur</label>
+                <input asp-for="Couleur" class="form-control" placeholder="Ex: Bleu, Noir..." />
+                <span asp-validation-for="Couleur" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AnneeMiseEnCirculation" class="form-label">Année de mise en circulation</label>
+                <input asp-for="AnneeMiseEnCirculation" type="number" min="1900" max="2030" class="form-control" />
+                <span asp-validation-for="AnneeMiseEnCirculation" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PlaqueImmatriculation" class="form-label">Plaque d'immatriculation</label>
+                <input asp-for="PlaqueImmatriculation" class="form-control" placeholder="Ex: ABC-123" />
+                <span asp-validation-for="PlaqueImmatriculation" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Transmission" class="form-label">Transmission</label>
+                <select asp-for="Transmission" class="form-control">
+                    <option value="Manuelle">Manuelle</option>
+                    <option value="Automatique">Automatique</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Kilométrage</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="KilometrageIllimite" id="KilometrageIllimite" />
+                    <label class="form-check-label" for="KilometrageIllimite">Kilométrage illimité</label>
+                </div>
+                <div id="kmLimitGroup" style="display: none; margin-top: 8px;">
+                    <input asp-for="KilometrageLimiteParJour" type="number" min="1" class="form-control" placeholder="Ex: 100 km/jour" />
+                    <span asp-validation-for="KilometrageLimiteParJour" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NombrePortes" class="form-label">Nombre de portes</label>
+                    <input asp-for="NombrePortes" type="number" min="2" max="6" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NombreSieges" class="form-label">Nombre de sièges</label>
+                    <input asp-for="NombreSieges" type="number" min="2" max="7" class="form-control" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="Climatisation" id="Climatisation" />
+                    <label class="form-check-label" for="Climatisation">Climatisation</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Carburant" class="form-label">Carburant</label>
+                <input asp-for="Carburant" class="form-control" placeholder="Ex: Essence, Diesel..." />
+                <span asp-validation-for="Carburant" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Image de la voiture</label>
+                <input type="file" name="imageFile" accept="image/*" class="form-control" />
+                <small class="text-muted">Formats acceptés: JPG, PNG, GIF</small>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById('KilometrageIllimite').addEventListener('change', function () {
+            document.getElementById('kmLimitGroup').style.display = this.checked ? 'none' : 'block';
+        });
+        // Initial state
+        if (!document.getElementById('KilometrageIllimite').checked) {
+            document.getElementById('kmLimitGroup').style.display = 'block';
+        }
+    </script>
+}
