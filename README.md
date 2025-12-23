@@ -1,8 +1,8 @@
-#  Gestion Voiture 212
+#  Gestion Voiture 
 
 ![Banner](Projet-GestionVoiture1%20-%20Copie/wwwroot/images/bg_1.jpg)
 
-Bienvenue dans **Gestion Voiture 212**, une application web de gestion de location de voitures développée en ASP.NET Core MVC.
+Bienvenue dans **Gestion Voiture**, une application web de gestion de location de voitures développée en ASP.NET Core MVC.
 
 ##  Description du projet
 
@@ -46,4 +46,4 @@ dotnet run
 
 --- 
 
-© 2025 Gestion Voiture 212. Tous droits réservés.
+© 2025 Gestion Voiture . Tous droits réservés.
