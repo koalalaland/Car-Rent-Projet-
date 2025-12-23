@@ -3,7 +3,7 @@
 ![Banner](Projet-GestionVoiture1%20-%20Copie/wwwroot/images/bg_1.jpg)
 
 Bienvenue dans **Gestion Voiture**, une application web de gestion de location de voitures développée en ASP.NET Core MVC.
-
+Réalisé par: Aya Kathiri - Khadija Sassioui 
 ##  Description du projet
 
 Ce projet permet de gérer efficacement un parc automobile pour la location, avec des fonctionnalités complètes pour les administrateurs et les clients :
